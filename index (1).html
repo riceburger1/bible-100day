@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#fff7e8" />
+  <title>말씀읽고 쓰기 도전 100일</title>
+  <style>
+    :root{--bg:#fffaf1;--card:#fff;--ink:#2f2a25;--muted:#7b746c;--line:#eee2d2;--accent:#e49b3e;--accent2:#8f5d2f;--good:#2f8f63;--bad:#c24a47;--soft:#fff2da;--shadow:0 12px 35px rgba(80,55,25,.10)}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:linear-gradient(180deg,#fff8e9 0%,#fffdf9 46%,#f8f4ed 100%);color:var(--ink);font-family:ui-rounded,"Pretendard","Noto Sans KR",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:760px;margin:0 auto;min-height:100vh;padding-bottom:96px}.hero{padding:24px 18px 16px}.brand{display:flex;align-items:center;gap:10px;color:var(--accent2);font-weight:900;letter-spacing:-.03em}.brand-mark{width:38px;height:38px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:22px;box-shadow:inset 0 0 0 1px #f0d7b3}h1{font-size:clamp(30px,7vw,48px);line-height:1.06;margin:18px 0 8px;letter-spacing:-.06em}.subtitle{color:var(--muted);font-size:15px;line-height:1.6;margin:0}.status-row{display:grid;grid-template-columns:1.1fr .9fr;gap:12px;margin-top:20px}.status-card{background:rgba(255,255,255,.88);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:var(--shadow)}.status-label{font-size:12px;color:var(--muted);font-weight:700}.status-value{font-size:28px;font-weight:900;margin-top:5px;letter-spacing:-.04em}.status-small{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 18px}.view{display:none}.view.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:20px;box-shadow:var(--shadow);margin:10px 0 16px}.eyebrow{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:var(--soft);color:var(--accent2);font-size:12px;font-weight:800}.verse-ref{font-size:24px;font-weight:900;margin:13px 0 10px;letter-spacing:-.04em}.verse{white-space:pre-wrap;line-height:1.9;font-size:17px;background:#fffaf3;border:1px dashed #ead1aa;padding:16px;border-radius:18px;color:#41382e}.verse.empty{color:var(--muted);font-style:italic}.hint{font-size:13px;line-height:1.55;color:var(--muted);margin:12px 2px 0}.cta{width:100%;border:0;border-radius:18px;padding:15px 18px;background:linear-gradient(135deg,var(--accent),#cb7a28);color:#fff;font-weight:900;font-size:16px;box-shadow:0 10px 24px rgba(213,133,46,.25)}.cta:disabled{opacity:.45;box-shadow:none;cursor:not-allowed}.secondary{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 16px;background:#fff;color:var(--ink);font-weight:800}.danger{border-color:#efc8c8;color:#a33}.success-box{display:none;border-radius:20px;padding:18px;background:#eef8f2;border:1px solid #cee8d7;margin-top:14px;text-align:center}.success-box.show{display:block}.success-icon{font-size:42px}.success-title{font-weight:900;font-size:20px;margin:5px 0}.success-copy{font-size:13px;color:#557060}.profile{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.chip{font-size:12px;background:#f6f1e9;border:1px solid #ebe0d0;padding:7px 10px;border-radius:999px;color:#685f55}.grid-stamps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.stamp{aspect-ratio:1;border:1px solid var(--line);background:#fff;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;overflow:hidden}.stamp strong{font-size:14px}.stamp span{font-size:10px;color:var(--muted)}.stamp.done{background:#fff7ed;border-color:#efc58e}.stamp.done:after{content:"성공";position:absolute;inset:auto 5px 5px auto;border:2px solid #d86a3d;color:#d86a3d;border-radius:50%;width:38px;height:38px;display:grid;place-items:center;font-size:10px;font-weight:900;transform:rotate(-12deg);background:rgba(255,255,255,.7)}.stamp.today{outline:3px solid rgba(228,155,62,.22)}.section-title{font-size:22px;font-weight:900;letter-spacing:-.04em;margin:8px 0 14px}.progress{height:10px;background:#f1e9dd;border-radius:999px;overflow:hidden}.progress>i{display:block;height:100%;background:linear-gradient(90deg,#e7aa51,#d97f29);border-radius:inherit;width:0}.progress-copy{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--muted)}.field{margin:12px 0}.field label{display:block;font-size:12px;color:var(--muted);font-weight:800;margin:0 0 6px}.input,.textarea,.select{width:100%;border:1px solid #ded5ca;background:#fff;border-radius:14px;padding:12px 13px;outline:none}.input:focus,.textarea:focus,.select:focus{border-color:#e4a65a;box-shadow:0 0 0 4px rgba(228,155,62,.12)}.textarea{min-height:150px;resize:vertical;line-height:1.6}.admin-login{max-width:460px;margin:20px auto}.admin-panel{display:none}.admin-panel.show{display:block}.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.admin-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 16px}.stat{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fffaf5}.stat b{display:block;font-size:22px}.stat span{font-size:11px;color:var(--muted)}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 8px;border-bottom:1px solid #eee6dd;text-align:left}th{color:#746c62;background:#fbf8f4;position:sticky;top:0}.table-wrap{max-height:430px;overflow:auto;border:1px solid var(--line);border-radius:14px}.nav{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:min(724px,calc(100% - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border:1px solid #e9ded1;padding:8px;border-radius:22px;box-shadow:0 14px 40px rgba(55,37,20,.16);z-index:20}.nav button{border:0;background:transparent;border-radius:15px;padding:9px 4px;color:#857c73;font-size:11px;font-weight:800}.nav button b{display:block;font-size:19px;margin-bottom:2px}.nav button.active{background:#fff2da;color:#9b622c}footer{text-align:center;padding:26px 20px 20px;color:#7e756c;font-size:12px;font-weight:800;letter-spacing:.02em}.modal{position:fixed;inset:0;background:rgba(37,29,21,.46);display:none;align-items:flex-end;justify-content:center;padding:12px;z-index:50}.modal.show{display:flex}.sheet{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:28px 28px 20px 20px;padding:20px;box-shadow:0 -20px 50px rgba(0,0,0,.18)}.sheet-handle{width:46px;height:5px;border-radius:999px;background:#ddd4ca;margin:0 auto 14px}.sheet h2{margin:0 0 4px;font-size:24px}.sheet p{margin:0;color:var(--muted);font-size:13px;line-height:1.55}.typebox{margin-top:14px;min-height:200px}.matchbar{font-size:12px;margin:8px 2px;color:var(--muted)}.matchbar.bad{color:var(--bad);font-weight:800}.matchbar.good{color:var(--good);font-weight:800}.modal-actions{display:grid;grid-template-columns:.7fr 1.3fr;gap:8px;margin-top:12px}.close-btn{border:1px solid var(--line);background:#fff;border-radius:16px;font-weight:800}.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-20px);background:#2e2a26;color:#fff;padding:12px 16px;border-radius:14px;font-size:13px;font-weight:800;opacity:0;pointer-events:none;transition:.22s;z-index:99}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.notice{font-size:12px;line-height:1.55;background:#f7f3ee;border:1px solid #e9dfd3;padding:12px 14px;border-radius:14px;color:#70675e}.online{color:var(--good)}.offline{color:var(--bad)}
+    @media(max-width:560px){.status-row{grid-template-columns:1fr 1fr}.status-value{font-size:24px}.grid-stamps{grid-template-columns:repeat(4,1fr)}.admin-grid,.admin-actions,.stats{grid-template-columns:1fr}.hero{padding-top:18px}.card{padding:17px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div class="brand"><div class="brand-mark">📖</div><span>말씀읽고 쓰기 도전 100일</span></div>
+    <h1>하루 한 말씀,<br>100일의 믿음 습관</h1>
+    <p class="subtitle">잠언 말씀 3~4절을 눈으로 읽고 손으로 따라 쓰며 하루의 말씀을 마음에 새겨요.</p>
+    <div class="status-row">
+      <div class="status-card"><div class="status-label">현재 도전</div><div id="dayStatus" class="status-value">DAY -</div><div id="dateStatus" class="status-small">설정 확인 중</div></div>
+      <div class="status-card"><div class="status-label">오늘 남은 시간</div><div id="countdown" class="status-value">--:--:--</div><div class="status-small">매일 24:00 말씀 변경</div></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="view-home" class="view active">
+      <div class="card">
+        <div class="eyebrow">🌿 오늘의 잠언</div>
+        <div id="homeRef" class="verse-ref">오늘의 본문</div>
+        <div id="homeVerse" class="verse empty">잠언 말씀을 준비하고 있습니다...</div>
+        <div class="hint">말씀을 정확히 따라 써야 도전이 완료됩니다. 글자나 단어가 다르면 등록되지 않습니다.</div>
+        <div class="hint">서버 상태: <b id="serverStatus">확인 중...</b></div>
+        <div id="profilePreview" class="profile"></div>
+      </div>
+      <button id="startWriteBtn" class="cta">✍️ 오늘 말씀 따라쓰기</button>
+      <div id="alreadyDone" class="success-box"><div class="success-icon">✅</div><div class="success-title">오늘 도전 완료!</div><div class="success-copy">도장판에 오늘 날짜 도장이 찍혔어요.</div></div>
+      <div class="card" style="margin-top:16px"><div class="section-title">나의 100일 진행률</div><div class="progress"><i id="homeProgress"></i></div><div class="progress-copy"><span id="homeProgressText">0일 성공</span><span>100일</span></div></div>
+    </section>
+
+    <section id="view-write" class="view"><div class="card"><div class="section-title">오늘 말씀 따라쓰기</div><p class="hint">학년과 이름을 확인한 뒤 오늘의 말씀을 그대로 입력하세요. 성공 기록은 교회 관리자 화면에 실시간으로 저장됩니다.</p><button id="openWriterBtn" class="cta" style="margin-top:14px">입력 시작하기</button></div></section>
+
+    <section id="view-stamps" class="view">
+      <div class="card"><div class="section-title">100일 도장판</div><div class="progress"><i id="stampProgress"></i></div><div class="progress-copy"><span id="stampProgressText">0 / 100</span><span id="stampUser">학생 정보 없음</span></div><p class="hint">개인 도장판은 이 기기에 저장됩니다. 전체 제출 기록은 Supabase에 안전하게 모여 관리자만 확인할 수 있습니다.</p></div>
+      <div id="stampGrid" class="grid-stamps"></div>
+    </section>
+
+    <section id="view-admin" class="view">
+      <div id="adminLogin" class="card admin-login">
+        <div class="section-title">관리자 로그인</div>
+        <div class="notice">관리자 PIN을 공개 코드에 넣지 않고 <b>Supabase Auth 이메일/비밀번호</b>로 로그인합니다. 관리자 목록에 등록된 계정만 학생 전체 기록을 볼 수 있습니다.</div>
+        <div class="field"><label>관리자 이메일</label><input id="adminEmail" class="input" type="email" autocomplete="username" placeholder="admin@example.com"></div>
+        <div class="field"><label>비밀번호</label><input id="adminPassword" class="input" type="password" autocomplete="current-password" placeholder="비밀번호"></div>
+        <button id="adminLoginBtn" class="cta">관리자 로그인</button>
+        <p id="adminLoginMessage" class="hint"></p>
+      </div>
+
+      <div id="adminPanel" class="admin-panel">
+        <div class="card">
+          <div class="section-title">오늘의 운영 현황</div>
+          <div class="stats"><div class="stat"><b id="statToday">0</b><span>오늘 완료</span></div><div class="stat"><b id="statStudents">0</b><span>누적 참여 학생</span></div><div class="stat"><b id="statTotal">0</b><span>누적 성공 기록</span></div></div>
+          <div class="admin-actions"><button id="refreshAdminBtn" class="secondary">🔄 새로고침</button><button id="exportCsvBtn" class="secondary">⬇ CSV 저장</button><button id="adminLogoutBtn" class="secondary">로그아웃</button></div>
+        </div>
+        <div class="card">
+          <div class="section-title">도전 기본 설정</div>
+          <div class="field"><label>도전 시작일</label><input id="startDateInput" class="input" type="date"></div>
+          <button id="saveStartDateBtn" class="secondary">시작일 저장</button>
+          <p class="hint">시작일을 바꾸면 모든 학생의 DAY 계산도 같은 기준으로 바뀝니다.</p>
+        </div>
+        <div class="card">
+          <div class="section-title">학생 입력 현황</div>
+          <div class="admin-grid"><div class="field"><label>DAY 필터</label><select id="filterDay" class="select"><option value="">전체 DAY</option></select></div><div class="field"><label>학년 필터</label><select id="filterGrade" class="select"><option value="">전체 학년</option><option>중1</option><option>중2</option><option>중3</option><option>고1</option><option>고2</option><option>고3</option></select></div></div>
+          <div class="table-wrap"><table><thead><tr><th>DAY</th><th>날짜</th><th>학년</th><th>이름</th><th>입력시각</th><th></th></tr></thead><tbody id="recordTbody"></tbody></table></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>양정중앙교회 청소년부 주의울림</footer>
+</div>
+
+<nav class="nav" aria-label="하단 메뉴"><button class="active" data-view="home"><b>🏠</b>홈</button><button data-view="write"><b>✍️</b>말씀쓰기</button><button data-view="stamps"><b>🏅</b>도장판</button><button data-view="admin"><b>⚙️</b>관리자</button></nav>
+
+<div id="writerModal" class="modal" role="dialog" aria-modal="true"><div class="sheet"><div class="sheet-handle"></div><h2>오늘 말씀 따라쓰기</h2><p id="writerRef">-</p><div class="admin-grid" style="margin-top:14px"><div class="field"><label>학년</label><select id="gradeInput" class="select"><option value="">선택</option><option>중1</option><option>중2</option><option>중3</option><option>고1</option><option>고2</option><option>고3</option></select></div><div class="field"><label>이름</label><input id="nameInput" class="input" type="text" maxlength="20" placeholder="이름"></div></div><div id="writerVerse" class="verse empty">오늘 말씀을 불러오는 중...</div><textarea id="typingInput" class="textarea typebox" placeholder="위 말씀을 그대로 따라 써 주세요." spellcheck="false"></textarea><div id="matchInfo" class="matchbar">아직 입력하지 않았어요.</div><div class="modal-actions"><button id="closeWriterBtn" class="close-btn">닫기</button><button id="submitBtn" class="cta">정확히 확인하고 등록</button></div></div></div>
+<div id="toast" class="toast"></div>
+
+<script src="./config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.2/dist/umd/supabase.min.js"></script>
+<script>
+(() => {
+  'use strict';
+  const TZ='Asia/Seoul';
+  const LOCAL_KEY='yc_proverbs100_online_v1';
+  const PASSAGE_VERSION='kor1910_auto_v1';
+  const BIBLE_URLS=['https://raw.githubusercontent.com/jsbang01357/BibleFrame/main/site/bible.json','https://cdn.jsdelivr.net/gh/jsbang01357/BibleFrame@main/site/bible.json'];
+  const cfg=window.APP_CONFIG||{};
+  const configured=String(cfg.SUPABASE_URL||'').startsWith('https://') && !String(cfg.SUPABASE_URL).includes('PASTE_') && String(cfg.SUPABASE_PUBLISHABLE_KEY||'').startsWith('sb_publishable_');
+  const db=configured ? window.supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}) : null;
+  const defaultLocal={startDate:cfg.DEFAULT_START_DATE||'2026-08-31',passageVersion:'',passages:Array.from({length:100},(_,i)=>({day:i+1,ref:`잠언 DAY ${i+1}`,text:''})),profile:{grade:'',name:''},stamps:[]};
+  let state=loadLocal(); let loadingPassages=false; let adminRecords=[]; let isAdmin=false;
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  function loadLocal(){try{const raw=JSON.parse(localStorage.getItem(LOCAL_KEY)||'null');return raw?{...structuredClone(defaultLocal),...raw,passages:Array.isArray(raw.passages)&&raw.passages.length===100?raw.passages:structuredClone(defaultLocal.passages),stamps:Array.isArray(raw.stamps)?raw.stamps:[]}:structuredClone(defaultLocal)}catch{return structuredClone(defaultLocal)}}
+  function saveLocal(){localStorage.setItem(LOCAL_KEY,JSON.stringify(state))}
+  function seoulParts(date=new Date()){const parts=new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(date);return Object.fromEntries(parts.filter(p=>p.type!=='literal').map(p=>[p.type,p.value]))}
+  function seoulDateStr(date=new Date()){const p=seoulParts(date);return `${p.year}-${p.month}-${p.day}`}
+  function midnightMs(s){return Date.parse(s+'T00:00:00+09:00')}
+  function dayInfo(){const today=seoulDateStr();const diff=Math.floor((midnightMs(today)-midnightMs(state.startDate))/86400000)+1;if(diff<1)return{day:1,raw:diff,status:'before'};if(diff>100)return{day:100,raw:diff,status:'after'};return{day:diff,raw:diff,status:'active'}}
+  function fmtDate(s){return new Intl.DateTimeFormat('ko-KR',{timeZone:TZ,month:'long',day:'numeric',weekday:'short'}).format(new Date(s+'T00:00:00+09:00'))}
+  function challengeDate(day){return new Date(midnightMs(state.startDate)+(day-1)*86400000).toISOString().slice(0,10)}
+  function normalizeText(s){return String(s||'').normalize('NFC').replace(/\s+/g,' ').trim()}
+  function passage(day){return state.passages[day-1]||{day,ref:`DAY ${day}`,text:''}}
+  function profileKey(){return `${state.profile.grade}|${state.profile.name}`}
+  function myDoneDays(){return new Set(state.stamps.filter(x=>x.profileKey===profileKey()).map(x=>x.day))}
+  function didToday(day=dayInfo().day){return !!state.profile.name && myDoneDays().has(day)}
+  function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+  function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+  function setServerStatus(ok,msg){const el=$('#serverStatus');el.textContent=msg;el.className=ok?'online':'offline'}
+
+  function make100DayPlan(payload){const verses=(payload?.verses||[]).filter(v=>v.code==='PRO').sort((a,b)=>a.chapter-b.chapter||a.verse-b.verse);if(verses.length<300)throw new Error('잠언 본문 데이터 부족');const byChapter=new Map();for(const v of verses){if(!byChapter.has(v.chapter))byChapter.set(v.chapter,[]);byChapter.get(v.chapter).push(v)}const plan=[];const n=verses.length;for(let i=0;i<100;i++){const want=(i%3===0)?4:3,target=Math.round(i*(n-1)/99),chosen=verses[target],chapter=byChapter.get(chosen.chapter);let pos=chapter.findIndex(v=>v.verse===chosen.verse);pos=Math.min(Math.max(pos,0),Math.max(0,chapter.length-want));const slice=chapter.slice(pos,pos+want),first=slice[0],last=slice[slice.length-1];plan.push({day:i+1,ref:`잠언 ${first.chapter}:${first.verse}-${last.verse}`,text:slice.map(v=>`${v.verse} ${String(v.text).trim()}`).join('\n')})}return plan}
+  async function ensurePassages(force=false){const ready=state.passageVersion===PASSAGE_VERSION&&state.passages.length===100&&state.passages.every(p=>p.text);if(ready&&!force)return true;if(loadingPassages)return false;loadingPassages=true;$('#startWriteBtn').disabled=true;for(const url of BIBLE_URLS){try{const r=await fetch(url,{cache:'force-cache'});if(!r.ok)throw new Error(`HTTP ${r.status}`);state.passages=make100DayPlan(await r.json());state.passageVersion=PASSAGE_VERSION;saveLocal();loadingPassages=false;renderAll();return true}catch(e){console.warn(e)}}loadingPassages=false;$('#homeVerse').textContent='말씀 데이터를 불러오지 못했습니다. 인터넷 연결 후 새로고침해 주세요.';return false}
+
+  async function syncSettings(){if(!db){setServerStatus(false,'Supabase 설정 필요');return false}try{const {data,error}=await db.from('app_settings').select('start_date').eq('id',true).single();if(error)throw error;state.startDate=data.start_date;saveLocal();setServerStatus(true,'온라인 연결됨');return true}catch(e){console.error(e);setServerStatus(false,'서버 연결 실패');return false}}
+
+  function renderHeader(){const info=dayInfo(),today=seoulDateStr();if(info.status==='before'){$('#dayStatus').textContent=`D-${Math.ceil((midnightMs(state.startDate)-midnightMs(today))/86400000)}`;$('#dateStatus').textContent=`${fmtDate(state.startDate)} 시작`}else if(info.status==='after'){$('#dayStatus').textContent='100일 완료';$('#dateStatus').textContent='도전 기간이 끝났어요'}else{$('#dayStatus').textContent=`DAY ${info.day}`;$('#dateStatus').textContent=`${fmtDate(today)} · ${info.day}일째`}}
+  function renderCountdown(){const p=seoulParts();let rem=86400-((+p.hour)*3600+(+p.minute)*60+(+p.second));if(rem===86400)rem=0;const h=String(Math.floor(rem/3600)).padStart(2,'0');rem%=3600;const m=String(Math.floor(rem/60)).padStart(2,'0'),s=String(rem%60).padStart(2,'0');$('#countdown').textContent=`${h}:${m}:${s}`}
+  function renderHome(){const info=dayInfo(),p=passage(info.day);$('#homeRef').textContent=p.ref||`DAY ${info.day}`;$('#homeVerse').textContent=p.text||(loadingPassages?'잠언 말씀을 준비하고 있습니다...':'잠언 말씀 데이터가 아직 없습니다.');$('#homeVerse').classList.toggle('empty',!p.text);$('#startWriteBtn').disabled=info.status!=='active'||!p.text||didToday(info.day)||!configured;$('#alreadyDone').classList.toggle('show',didToday(info.day));const done=myDoneDays().size;$('#homeProgress').style.width=`${done}%`;$('#homeProgressText').textContent=`${done}일 성공`;$('#profilePreview').innerHTML=state.profile.name?`<span class="chip">${esc(state.profile.grade)}</span><span class="chip">${esc(state.profile.name)}</span>`:''}
+  function renderStamps(){const done=myDoneDays(),info=dayInfo();$('#stampProgress').style.width=`${done.size}%`;$('#stampProgressText').textContent=`${done.size} / 100`;$('#stampUser').textContent=state.profile.name?`${state.profile.grade} ${state.profile.name}`:'학생 정보 없음';const grid=$('#stampGrid');grid.innerHTML='';for(let d=1;d<=100;d++){const el=document.createElement('div');el.className='stamp'+(done.has(d)?' done':'')+(info.day===d&&info.status==='active'?' today':'');el.innerHTML=`<strong>DAY ${d}</strong><span>${challengeDate(d).slice(5).replace('-','.')}</span>`;grid.appendChild(el)}}
+  function renderAll(){renderHeader();renderCountdown();renderHome();renderStamps()}
+
+  function openWriter(){const info=dayInfo(),p=passage(info.day);if(!configured)return toast('먼저 Supabase 설정을 완료해 주세요.');if(info.status!=='active')return toast('현재는 도전 입력 기간이 아닙니다.');if(!p.text)return toast('말씀을 불러오는 중입니다.');if(didToday(info.day))return toast('오늘 도전은 이미 완료했어요!');$('#writerRef').textContent=p.ref;$('#writerVerse').textContent=p.text;$('#writerVerse').classList.remove('empty');$('#gradeInput').value=state.profile.grade||'';$('#nameInput').value=state.profile.name||'';$('#typingInput').value='';updateMatch();$('#writerModal').classList.add('show')}
+  function closeWriter(){$('#writerModal').classList.remove('show')}
+  function updateMatch(){const target=normalizeText(passage(dayInfo().day).text),typed=normalizeText($('#typingInput').value),el=$('#matchInfo');el.className='matchbar';if(!typed){el.textContent='아직 입력하지 않았어요.';return}if(typed===target){el.textContent='✓ 말씀과 정확히 일치합니다.';el.classList.add('good')}else{el.textContent='아직 말씀과 일치하지 않습니다. 틀린 글자를 확인해 주세요.';el.classList.add('bad')}}
+  async function submit(){const grade=$('#gradeInput').value.trim(),name=$('#nameInput').value.trim();if(!grade||!name)return toast('학년과 이름을 입력해 주세요.');const info=dayInfo(),target=normalizeText(passage(info.day).text),typed=normalizeText($('#typingInput').value);if(target!==typed)return toast('글자가 달라서 등록되지 않았어요. 다시 확인해 주세요.');if(!db)return toast('서버 설정이 완료되지 않았습니다.');$('#submitBtn').disabled=true;$('#submitBtn').textContent='등록 중...';try{const {error}=await db.from('challenge_submissions').insert({challenge_day:info.day,grade,student_name:name});if(error){if(error.code==='23505')throw new Error('이미 오늘 도전을 완료한 이름입니다.');throw error}state.profile={grade,name};const pk=`${grade}|${name}`;if(!state.stamps.some(x=>x.day===info.day&&x.profileKey===pk))state.stamps.push({day:info.day,profileKey:pk,date:seoulDateStr(),at:new Date().toISOString()});saveLocal();closeWriter();renderAll();showView('stamps');toast('성공! 서버에 저장되고 도장이 찍혔어요 🎉')}catch(e){console.error(e);toast(e.message||'등록에 실패했습니다. 인터넷 연결을 확인해 주세요.')}finally{$('#submitBtn').disabled=false;$('#submitBtn').textContent='정확히 확인하고 등록'}}
+
+  async function checkAdmin(){if(!db)return false;const {data:{user}}=await db.auth.getUser();if(!user)return false;const {data,error}=await db.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();isAdmin=!!data&&!error;return isAdmin}
+  async function adminLogin(){if(!db)return $('#adminLoginMessage').textContent='config.js에 Supabase 설정을 먼저 입력해 주세요.';const email=$('#adminEmail').value.trim(),password=$('#adminPassword').value;if(!email||!password)return toast('관리자 이메일과 비밀번호를 입력해 주세요.');$('#adminLoginBtn').disabled=true;try{const {error}=await db.auth.signInWithPassword({email,password});if(error)throw error;if(!(await checkAdmin())){await db.auth.signOut();throw new Error('관리자 권한이 등록되지 않은 계정입니다.')}showAdminPanel();await loadAdminRecords();toast('관리자 모드로 로그인했습니다.')}catch(e){console.error(e);$('#adminLoginMessage').textContent=e.message||'로그인에 실패했습니다.'}finally{$('#adminLoginBtn').disabled=false}}
+  function showAdminPanel(){$('#adminLogin').style.display='none';$('#adminPanel').classList.add('show');$('#startDateInput').value=state.startDate}
+  async function loadAdminRecords(){if(!isAdmin)return;const {data,error}=await db.from('challenge_submissions').select('id,challenge_day,challenge_date,grade,student_name,submitted_at').order('submitted_at',{ascending:false}).limit(5000);if(error){toast('관리자 기록을 불러오지 못했습니다.');console.error(error);return}adminRecords=data||[];renderAdminRecords()}
+  function renderAdminRecords(){const dayFilter=$('#filterDay').value,gradeFilter=$('#filterGrade').value;const filtered=adminRecords.filter(r=>(!dayFilter||String(r.challenge_day)===dayFilter)&&(!gradeFilter||r.grade===gradeFilter));const tb=$('#recordTbody');tb.innerHTML='';for(const r of filtered){const time=new Intl.DateTimeFormat('ko-KR',{timeZone:TZ,month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(r.submitted_at));const tr=document.createElement('tr');tr.innerHTML=`<td>${r.challenge_day}</td><td>${esc(r.challenge_date)}</td><td>${esc(r.grade)}</td><td>${esc(r.student_name)}</td><td>${esc(time)}</td><td><button class="secondary danger" data-del="${r.id}" style="padding:6px 8px">삭제</button></td>`;tb.appendChild(tr)}if(!filtered.length)tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">기록이 없습니다.</td></tr>';const today=dayInfo().day;$('#statToday').textContent=adminRecords.filter(r=>r.challenge_day===today&&r.challenge_date===seoulDateStr()).length;$('#statStudents').textContent=new Set(adminRecords.map(r=>`${r.grade}|${r.student_name.replace(/\s/g,'')}`)).size;$('#statTotal').textContent=adminRecords.length;$$('[data-del]').forEach(b=>b.addEventListener('click',()=>deleteRecord(b.dataset.del)))}
+  async function deleteRecord(id){if(!confirm('이 성공 기록을 삭제할까요?'))return;const {error}=await db.from('challenge_submissions').delete().eq('id',id);if(error)return toast('삭제에 실패했습니다.');await loadAdminRecords();toast('기록을 삭제했습니다.')}
+  async function saveStartDate(){const v=$('#startDateInput').value;if(!v)return;const {error}=await db.from('app_settings').update({start_date:v,updated_at:new Date().toISOString()}).eq('id',true);if(error)return toast('시작일 저장에 실패했습니다.');state.startDate=v;saveLocal();renderAll();toast('전체 도전 시작일을 변경했습니다.')}
+  function exportCsv(){const rows=[['DAY','날짜','학년','이름','입력시각'],...adminRecords.map(r=>[r.challenge_day,r.challenge_date,r.grade,r.student_name,new Date(r.submitted_at).toLocaleString('ko-KR',{timeZone:TZ})])];const csv='\uFEFF'+rows.map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='proverbs-100day-records.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+  async function adminLogout(){if(db)await db.auth.signOut();isAdmin=false;$('#adminPanel').classList.remove('show');$('#adminLogin').style.display='block';adminRecords=[];toast('로그아웃했습니다.')}
+  function showView(v){$$('.view').forEach(el=>el.classList.remove('active'));$(`#view-${v}`).classList.add('active');$$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));if(v==='stamps')renderStamps();if(v==='admin')resumeAdmin()}
+  async function resumeAdmin(){if(await checkAdmin()){showAdminPanel();await loadAdminRecords()}}
+
+  for(let d=1;d<=100;d++)$('#filterDay').insertAdjacentHTML('beforeend',`<option value="${d}">DAY ${d}</option>`);
+  $$('.nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));$('#startWriteBtn').addEventListener('click',openWriter);$('#openWriterBtn').addEventListener('click',openWriter);$('#closeWriterBtn').addEventListener('click',closeWriter);$('#writerModal').addEventListener('click',e=>{if(e.target===$('#writerModal'))closeWriter()});$('#typingInput').addEventListener('input',updateMatch);$('#submitBtn').addEventListener('click',submit);$('#adminLoginBtn').addEventListener('click',adminLogin);$('#refreshAdminBtn').addEventListener('click',loadAdminRecords);$('#exportCsvBtn').addEventListener('click',exportCsv);$('#adminLogoutBtn').addEventListener('click',adminLogout);$('#saveStartDateBtn').addEventListener('click',saveStartDate);$('#filterDay').addEventListener('change',renderAdminRecords);$('#filterGrade').addEventListener('change',renderAdminRecords);
+  let lastDate=seoulDateStr();setInterval(async()=>{renderCountdown();const now=seoulDateStr();if(now!==lastDate){lastDate=now;await syncSettings();renderAll();toast('새로운 날의 말씀으로 변경되었습니다.')}},1000);
+
+  renderAll();
+  if(!configured){setServerStatus(false,'config.js 설정 필요');$('#adminLoginMessage').textContent='Supabase Project URL과 Publishable key를 config.js에 입력하면 운영 모드가 활성화됩니다.'}
+  (async()=>{await Promise.all([ensurePassages(),syncSettings()]);renderAll();await resumeAdmin()})();
+})();
+</script>
+</body>
+</html>
