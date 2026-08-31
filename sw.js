@@ -1,5 +1,5 @@
-const CACHE_NAME = 'yc-proverbs100-pwa-v1';
-const RUNTIME_CACHE = 'yc-proverbs100-runtime-v1';
+const CACHE_NAME = 'yc-proverbs100-pwa-v2';
+const RUNTIME_CACHE = 'yc-proverbs100-runtime-v2';
 const APP_SHELL = [
   './',
   './index.html',
@@ -39,7 +39,7 @@ function isBibleOrLibraryRequest(url) {
 async function networkFirst(request) {
   const cache = await caches.open(CACHE_NAME);
   try {
-    const fresh = await fetch(request);
+    const fresh = await fetch(request, { cache: 'no-store' });
     if (fresh && fresh.ok) cache.put(request, fresh.clone());
     return fresh;
   } catch (error) {
@@ -67,22 +67,20 @@ self.addEventListener('fetch', event => {
 
   const url = new URL(request.url);
 
-  // 학생 제출·관리자 조회 등 Supabase 요청은 항상 서버에서 처리합니다.
+  // Supabase 데이터는 항상 서버와 직접 통신합니다.
   if (isSupabaseRequest(url)) return;
 
-  // 페이지 이동과 설정파일은 새 버전을 우선 확인합니다.
+  // 새 배포가 있으면 HTML/config를 우선 받아옵니다.
   if (request.mode === 'navigate' || url.pathname.endsWith('/config.js') || url.pathname.endsWith('/index.html')) {
     event.respondWith(networkFirst(request).catch(() => caches.match('./index.html')));
     return;
   }
 
-  // 외부 성경 데이터와 Supabase JS 라이브러리는 한 번 받은 뒤 재사용합니다.
   if (isBibleOrLibraryRequest(url)) {
     event.respondWith(staleWhileRevalidate(request));
     return;
   }
 
-  // 같은 사이트의 아이콘·manifest 등 정적 파일
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.match(request).then(cached => cached || fetch(request).then(response => {
