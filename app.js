@@ -13,12 +13,14 @@ const escapeHtml = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;"
 function dbErrorMessage(error, fallback = "처리 중 오류가 발생했습니다.") {
   if (!error) return fallback;
   console.error("Supabase error:", error);
-  const code = error.code ? ` (${error.code})` : "";
-  if (error.code === "42501") return `저장 권한이 없습니다. Supabase 관리자 RLS 설정을 확인해 주세요.${code}`;
-  if (error.code === "23505") return `같은 날짜의 데이터가 이미 있습니다.${code}`;
-  if (error.code === "23503") return `연결된 데이터가 없어 저장할 수 없습니다.${code}`;
-  if (error.code === "PGRST116") return `저장 후 데이터를 다시 읽지 못했습니다. 관리자 SELECT 정책을 확인해 주세요.${code}`;
-  return `${fallback}${code}${error.message ? ` · ${error.message}` : ""}`;
+  const code = error.code ? ` [${error.code}]` : "";
+  const extra = [error.message, error.details, error.hint].filter(Boolean).join(" · ");
+  if (error.code === "42501") return `저장 권한이 없습니다. 관리자 RLS/GRANT 설정을 확인해 주세요.${code}${extra ? ` · ${extra}` : ""}`;
+  if (error.code === "23505") return `같은 주의 데이터가 이미 있습니다.${code}${extra ? ` · ${extra}` : ""}`;
+  if (error.code === "23503") return `연결된 데이터가 없어 저장할 수 없습니다.${code}${extra ? ` · ${extra}` : ""}`;
+  if (error.code === "42703") return `데이터베이스 칼럼 구성이 앱과 다릅니다.${code}${extra ? ` · ${extra}` : ""}`;
+  if (error.code === "PGRST116") return `저장 후 데이터를 다시 읽지 못했습니다. 관리자 SELECT 정책을 확인해 주세요.${code}${extra ? ` · ${extra}` : ""}`;
+  return `${fallback}${code}${extra ? ` · ${extra}` : ""}`;
 }
 
 let weekly = null;
@@ -146,7 +148,14 @@ $("#installBtn").addEventListener("click", async () => {
   deferredPrompt = null;
   $("#installBtn").classList.add("hidden");
 });
-if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js"));
+if ("serviceWorker" in navigator) window.addEventListener("load", async () => {
+  try {
+    const reg = await navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" });
+    await reg.update();
+  } catch (err) {
+    console.warn("Service worker update failed:", err);
+  }
+});
 
 async function loadWeekly() {
   const { data, error } = await db.from("weekly_contents")
@@ -371,8 +380,7 @@ $("#weeklyForm").addEventListener("submit", async e => {
     verse_reference: clean($("#adminVerseRef").value),
     verse_text: clean($("#adminVerseText").value),
     study_title: clean($("#adminStudyTitle").value),
-    published: $("#weeklyPublished").checked,
-    updated_at: new Date().toISOString()
+    published: $("#weeklyPublished").checked
   };
   const qs = [
     clean($("#adminQ1").value),
@@ -387,9 +395,28 @@ $("#weeklyForm").addEventListener("submit", async e => {
 
   status.textContent = "저장 중입니다…";
 
-  // onConflict/UNIQUE 제약에 의존하지 않고, 같은 주가 있으면 UPDATE / 없으면 INSERT 합니다.
+  // 저장 직전 세션과 관리자 권한을 다시 확인합니다.
+  const { data: userData, error: userError } = await db.auth.getUser();
+  if (userError || !userData?.user) {
+    status.textContent = "로그인 세션이 만료되었습니다. 관리자 로그아웃 후 다시 로그인해 주세요.";
+    return;
+  }
+  const adminCheck = await db.from("admin_users")
+    .select("user_id")
+    .eq("user_id", userData.user.id)
+    .maybeSingle();
+  if (adminCheck.error) {
+    status.textContent = dbErrorMessage(adminCheck.error, "관리자 권한 확인에 실패했습니다.");
+    return;
+  }
+  if (!adminCheck.data) {
+    status.textContent = "현재 로그인 계정이 admin_users에 등록되어 있지 않습니다.";
+    return;
+  }
+
+  // 같은 week_start가 있으면 UPDATE, 없으면 INSERT.
   const existing = await db.from("weekly_contents")
-    .select("id, week_start")
+    .select("id")
     .eq("week_start", payload.week_start)
     .maybeSingle();
   if (existing.error) {
@@ -397,33 +424,33 @@ $("#weeklyForm").addEventListener("submit", async e => {
     return;
   }
 
-  let res;
-  if (existing.data?.id) {
-    res = await db.from("weekly_contents")
+  let wid = existing.data?.id || null;
+  if (wid) {
+    const upd = await db.from("weekly_contents")
       .update(payload)
-      .eq("id", existing.data.id)
-      .select("*")
-      .single();
+      .eq("id", wid);
+    if (upd.error) {
+      status.textContent = dbErrorMessage(upd.error, "말씀 수정 저장에 실패했습니다.");
+      return;
+    }
   } else {
-    res = await db.from("weekly_contents")
+    const ins = await db.from("weekly_contents")
       .insert(payload)
-      .select("*")
+      .select("id")
       .single();
+    if (ins.error || !ins.data?.id) {
+      status.textContent = dbErrorMessage(ins.error, "새 말씀 저장에 실패했습니다.");
+      return;
+    }
+    wid = ins.data.id;
   }
 
-  if (res.error || !res.data?.id) {
-    status.textContent = dbErrorMessage(res.error, "말씀 저장에 실패했습니다.");
-    return;
-  }
-
-  const wid = res.data.id;
-
-  // 기존 질문 삭제 실패를 무시하지 않고 즉시 알려 줍니다.
+  // 질문은 해당 주의 기존 항목을 지우고 2~3개를 다시 저장합니다.
   const del = await db.from("study_questions")
     .delete()
     .eq("weekly_content_id", wid);
   if (del.error) {
-    status.textContent = dbErrorMessage(del.error, "말씀은 저장됐지만 기존 성경공부 질문을 정리하지 못했습니다.");
+    status.textContent = dbErrorMessage(del.error, "말씀은 저장됐지만 기존 성경공부 질문 삭제에 실패했습니다.");
     return;
   }
 
@@ -439,10 +466,18 @@ $("#weeklyForm").addEventListener("submit", async e => {
     return;
   }
 
-  weekly = res.data;
+  // 저장된 행을 다시 읽어 화면 상태를 동기화합니다.
+  const reread = await db.from("weekly_contents")
+    .select("*")
+    .eq("id", wid)
+    .maybeSingle();
+  if (reread.error) {
+    status.textContent = dbErrorMessage(reread.error, "저장은 완료됐지만 화면 갱신용 조회에 실패했습니다.");
+    return;
+  }
+  weekly = reread.data || { id: wid, ...payload };
   status.textContent = "말씀과 성경공부 문제가 저장되었습니다.";
 
-  // 공개된 내용은 학생 화면까지 즉시 갱신합니다.
   if (payload.published) {
     await loadWeekly();
   } else {
