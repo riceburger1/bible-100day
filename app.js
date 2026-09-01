@@ -3,6 +3,8 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SUPABASE_URL = "https://jdnxmkkyusktfiavfdwb.supabase.co";
 const SUPABASE_KEY = "sb_publishable_swA-gv1uwixyiN-qZUYLzQ_J6oqxGiI";
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+const APP_VERSION = "v7-admin-content-save-idempotent";
+console.info("주의울림 앱 버전:", APP_VERSION);
 
 const $ = (q) => document.querySelector(q);
 const $$ = (q) => [...document.querySelectorAll(q)];
@@ -356,6 +358,7 @@ async function verifyAdmin(user) {
   }
   $("#adminLoginStatus").textContent = "";
   setAdminState(true);
+  if ($("#weeklyAdminStatus")) $("#weeklyAdminStatus").textContent = "관리자 저장 기능 v7 준비 완료.";
   await loadAdminRecords();
 }
 function setAdminState(value) {
@@ -488,12 +491,57 @@ $("#weeklyForm").addEventListener("submit", async e => {
 
 $("#noticeAdminForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const { error } = await db.from("notices").insert({
-    title:clean($("#noticeTitle").value), event_date:$("#noticeDate").value||null,
-    body:clean($("#noticeBody").value), banner:$("#noticeBanner").checked, published:true
-  });
-  $("#noticeAdminStatus").textContent=error?"공지 등록에 실패했습니다.":"공지사항이 등록되었습니다.";
-  if(!error){e.target.reset();$("#noticeBanner").checked=true;await loadNotices();}
+  const status = $("#noticeAdminStatus");
+  if (!isAdmin) {
+    status.textContent = "관리자 로그인 후 공지를 등록해 주세요.";
+    return;
+  }
+
+  const payload = {
+    title: clean($("#noticeTitle").value),
+    event_date: $("#noticeDate").value || null,
+    body: clean($("#noticeBody").value),
+    banner: $("#noticeBanner").checked,
+    published: true
+  };
+
+  if (!payload.title || !payload.body) {
+    status.textContent = "공지 제목과 내용을 입력해 주세요.";
+    return;
+  }
+
+  status.textContent = "공지사항 저장 중입니다…";
+
+  const { data: userData, error: userError } = await db.auth.getUser();
+  if (userError || !userData?.user) {
+    status.textContent = "로그인 세션이 만료되었습니다. 관리자 로그아웃 후 다시 로그인해 주세요.";
+    return;
+  }
+
+  const adminCheck = await db.from("admin_users")
+    .select("user_id")
+    .eq("user_id", userData.user.id)
+    .maybeSingle();
+  if (adminCheck.error) {
+    status.textContent = dbErrorMessage(adminCheck.error, "관리자 권한 확인에 실패했습니다.");
+    return;
+  }
+  if (!adminCheck.data) {
+    status.textContent = "현재 로그인 계정이 admin_users에 등록되어 있지 않습니다.";
+    return;
+  }
+
+  const { error } = await db.from("notices").insert(payload);
+  if (error) {
+    status.textContent = dbErrorMessage(error, "공지 등록에 실패했습니다.");
+    return;
+  }
+
+  status.textContent = "공지사항이 등록되었습니다.";
+  e.target.reset();
+  $("#noticeBanner").checked = true;
+  await loadNotices();
+  await loadAdminRecords();
 });
 
 async function loadAdminRecords() {
