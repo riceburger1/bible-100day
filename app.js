@@ -3,7 +3,7 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SUPABASE_URL = "https://jdnxmkkyusktfiavfdwb.supabase.co";
 const SUPABASE_KEY = "sb_publishable_swA-gv1uwixyiN-qZUYLzQ_J6oqxGiI";
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
-const APP_VERSION = "v7-admin-content-save-idempotent";
+const APP_VERSION = "v8-admin-content-editor";
 console.info("주의울림 앱 버전:", APP_VERSION);
 
 const $ = (q) => document.querySelector(q);
@@ -12,16 +12,17 @@ const clean = (s) => String(s ?? "").replace(/\s+/g," ").trim();
 const normalize = (s) => clean(s).replace(/\s/g,"");
 const escapeHtml = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
+
 function dbErrorMessage(error, fallback = "처리 중 오류가 발생했습니다.") {
   if (!error) return fallback;
   console.error("Supabase error:", error);
   const code = error.code ? ` [${error.code}]` : "";
   const extra = [error.message, error.details, error.hint].filter(Boolean).join(" · ");
-  if (error.code === "42501") return `저장 권한이 없습니다. 관리자 RLS/GRANT 설정을 확인해 주세요.${code}${extra ? ` · ${extra}` : ""}`;
-  if (error.code === "23505") return `같은 주의 데이터가 이미 있습니다.${code}${extra ? ` · ${extra}` : ""}`;
+  if (error.code === "42501") return `저장 권한이 없습니다.${code}${extra ? ` · ${extra}` : ""}`;
+  if (error.code === "23505") return `같은 날짜/순서의 데이터가 이미 있습니다.${code}${extra ? ` · ${extra}` : ""}`;
   if (error.code === "23503") return `연결된 데이터가 없어 저장할 수 없습니다.${code}${extra ? ` · ${extra}` : ""}`;
   if (error.code === "42703") return `데이터베이스 칼럼 구성이 앱과 다릅니다.${code}${extra ? ` · ${extra}` : ""}`;
-  if (error.code === "PGRST116") return `저장 후 데이터를 다시 읽지 못했습니다. 관리자 SELECT 정책을 확인해 주세요.${code}${extra ? ` · ${extra}` : ""}`;
+  if (["PGRST202","PGRST205"].includes(error.code)) return `${fallback}${code}${extra ? ` · ${extra}` : ""}`;
   return `${fallback}${code}${extra ? ` · ${extra}` : ""}`;
 }
 
@@ -29,6 +30,11 @@ let weekly = null;
 let questions = [];
 let deferredPrompt = null;
 let isAdmin = false;
+let gratitudeCalendarCursor = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+let adminWeeklyId = null;
+let adminWeeklyRows = [];
+let adminNoticeId = null;
+let adminNoticeRows = [];
 
 const PROFILE_STORAGE_KEY = "주의울림-profile-v2";
 const GRATITUDE_PREFIX = "주의울림-gratitude-v2:";
@@ -104,9 +110,69 @@ function streakStats(rows) {
   }
   return {current,best};
 }
+function activeStreakDates(rows, stats) {
+  if (!stats.current) return new Set();
+  const dates = new Set(rows.map(x=>x.date).filter(Boolean));
+  const today = localISODate();
+  const yesterday = addDaysISO(today,-1);
+  let last = dates.has(today) ? today : (dates.has(yesterday) ? yesterday : null);
+  if (!last) return new Set();
+  const active = new Set();
+  for (let i=0;i<stats.current;i++) active.add(addDaysISO(last,-i));
+  return active;
+}
+function renderGratitudeCalendar(rows, stats, ready) {
+  const year = gratitudeCalendarCursor.getFullYear();
+  const month = gratitudeCalendarCursor.getMonth();
+  const monthKey = `${year}-${String(month+1).padStart(2,"0")}`;
+  const today = localISODate();
+  const todayObj = new Date();
+  const currentMonthKey = `${todayObj.getFullYear()}-${String(todayObj.getMonth()+1).padStart(2,"0")}`;
+  const firstDay = new Date(year, month, 1).getDay();
+  const lastDate = new Date(year, month+1, 0).getDate();
+  const recorded = new Set(rows.map(x=>x.date));
+  const active = activeStreakDates(rows, stats);
+  const cells = [];
+  for (let i=0;i<firstDay;i++) cells.push('<span class="calendar-day empty" aria-hidden="true"></span>');
+  for (let day=1;day<=lastDate;day++) {
+    const iso = `${monthKey}-${String(day).padStart(2,"0")}`;
+    const isRecorded = recorded.has(iso);
+    const isToday = iso === today;
+    const isFuture = iso > today;
+    const icon = isRecorded ? (active.has(iso) ? "🔥" : "✅") : "";
+    const classes = ["calendar-day", isRecorded?"recorded":"", active.has(iso)?"active-streak":"", isToday?"today":"", isFuture?"future":""].filter(Boolean).join(" ");
+    const label = `${year}년 ${month+1}월 ${day}일${isRecorded ? " 감사기도 기록 완료" : ""}${isToday ? " 오늘" : ""}`;
+    cells.push(`<span class="${classes}" role="gridcell" aria-label="${label}"><span class="day-number">${day}</span><span class="day-mark" aria-hidden="true">${icon}</span></span>`);
+  }
+  $("#gratitudeCalendar").innerHTML = cells.join("");
+  $("#gratitudeCalendarMonth").textContent = `${year}년 ${month+1}월`;
+  const monthCount = rows.filter(x=>String(x.date).startsWith(monthKey)).length;
+  $("#gratitudeMonthCount").textContent = `${month+1}월 ${monthCount}일 기록`;
+  $("#gratitudeCalendarHint").textContent = ready ? (monthCount ? "🔥는 현재 이어지는 연속 기록, ✅는 완료한 기록입니다." : "아직 이 달의 기록이 없습니다.") : "내 정보를 입력하면 나의 감사 기록을 표시합니다.";
+  $("#gratitudeNextMonth").disabled = monthKey >= currentMonthKey;
+}
+function renderGratitudeBadges(stats, ready) {
+  const badges = [
+    {days:7, icon:"🏅", title:"7일 감사습관", desc:"7일 연속 감사기도 달성"},
+    {days:30, icon:"🏆", title:"30일 감사습관", desc:"30일 연속 감사기도 달성"}
+  ];
+  const unlockedCount = badges.filter(b=>stats.best>=b.days).length;
+  $("#gratitudeBadgeCount").textContent = `${unlockedCount}/2`;
+  $("#gratitudeBadges").innerHTML = badges.map(b=>{
+    const unlocked = stats.best >= b.days;
+    const progress = unlocked ? b.days : Math.min(stats.current,b.days);
+    const pct = Math.round(progress / b.days * 100);
+    return `<article class="challenge-badge ${unlocked?"unlocked":"locked"}">
+      <div class="badge-icon" aria-hidden="true">${unlocked?b.icon:"🔒"}</div>
+      <div class="badge-copy"><div class="badge-title-row"><strong>${b.title}</strong><span>${unlocked?"달성!":`${progress}/${b.days}일`}</span></div>
+      <p>${unlocked?`${b.desc} 배지를 획득했습니다!`:ready?`${b.days}일을 연속으로 기록하면 배지가 열립니다.`:"내 정보를 입력하고 챌린지를 시작해 보세요."}</p>
+      <div class="badge-progress" aria-label="${b.title} 진행률 ${pct}%"><span style="width:${pct}%"></span></div></div>
+    </article>`;
+  }).join("");
+}
 function renderGratitudeChallenge() {
   const p = profile();
-  const ready = p.grade && p.name;
+  const ready = Boolean(p.grade && p.name);
   const rows = ready ? getLocalGratitude(p).sort((a,b)=>String(b.date).localeCompare(String(a.date))) : [];
   const stats = streakStats(rows);
   const today = localISODate();
@@ -116,6 +182,8 @@ function renderGratitudeChallenge() {
   $("#gratitudeToday").textContent = doneToday ? "완료 ✓" : "미기록";
   $("#gratitudeCount").textContent = `${rows.length}회`;
   $("#gratitudeSubmitBtn").disabled = doneToday;
+  renderGratitudeCalendar(rows, stats, ready);
+  renderGratitudeBadges(stats, ready);
   if (!ready) {
     $("#gratitudeHistory").innerHTML = '<p class="muted">내 정보에서 학년과 이름을 입력하면 챌린지 기록이 표시됩니다.</p>';
     return;
@@ -137,6 +205,17 @@ $$(".tab").forEach(btn => btn.addEventListener("click", () => {
   $("#" + btn.dataset.tab).classList.remove("hidden");
   if (btn.dataset.tab === "gratitude") renderGratitudeChallenge();
 }));
+$("#gratitudePrevMonth").addEventListener("click", () => {
+  gratitudeCalendarCursor = new Date(gratitudeCalendarCursor.getFullYear(), gratitudeCalendarCursor.getMonth()-1, 1);
+  renderGratitudeChallenge();
+});
+$("#gratitudeNextMonth").addEventListener("click", () => {
+  const now = new Date();
+  const next = new Date(gratitudeCalendarCursor.getFullYear(), gratitudeCalendarCursor.getMonth()+1, 1);
+  const current = new Date(now.getFullYear(), now.getMonth(), 1);
+  if (next <= current) gratitudeCalendarCursor = next;
+  renderGratitudeChallenge();
+});
 
 window.addEventListener("beforeinstallprompt", e => {
   e.preventDefault();
@@ -152,11 +231,9 @@ $("#installBtn").addEventListener("click", async () => {
 });
 if ("serviceWorker" in navigator) window.addEventListener("load", async () => {
   try {
-    const reg = await navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" });
+    const reg = await navigator.serviceWorker.register("./sw.js", { updateViaCache:"none" });
     await reg.update();
-  } catch (err) {
-    console.warn("Service worker update failed:", err);
-  }
+  } catch (err) { console.warn("Service worker update failed:", err); }
 });
 
 async function loadWeekly() {
@@ -172,11 +249,6 @@ async function loadWeekly() {
   $("#verseReference").textContent = data.verse_reference;
   $("#verseText").textContent = data.verse_text;
   $("#studyTitle").textContent = data.study_title;
-  $("#weekStart").value = data.week_start;
-  $("#adminVerseRef").value = data.verse_reference;
-  $("#adminVerseText").value = data.verse_text;
-  $("#adminStudyTitle").value = data.study_title;
-  $("#weeklyPublished").checked = data.published;
   $("#wordStatus").textContent = "말씀을 직접 입력해 주세요.";
   await loadQuestions();
 }
@@ -190,9 +262,6 @@ async function loadQuestions() {
     <label class="field-label">${i+1}. ${escapeHtml(q.question_text)}
       <textarea data-answer="${i}" rows="4" maxlength="2000" required placeholder="내 생각을 적어 주세요."></textarea>
     </label>`).join("");
-  $("#adminQ1").value = questions[0]?.question_text || "";
-  $("#adminQ2").value = questions[1]?.question_text || "";
-  $("#adminQ3").value = questions[2]?.question_text || "";
 }
 
 const verseInput = $("#verseInput");
@@ -281,6 +350,7 @@ $("#gratitudeForm").addEventListener("submit", async e => {
   if (!text) { $("#gratitudeStatus").textContent = "오늘 감사한 내용을 적어 주세요."; return; }
   const today = localISODate();
   let localRows = getLocalGratitude(p);
+  const beforeStats = streakStats(localRows);
   if (localRows.some(x=>x.date===today)) {
     $("#gratitudeStatus").textContent = "오늘 감사기도는 이미 기록했습니다. 내일 다시 이어가세요!";
     renderGratitudeChallenge();
@@ -304,7 +374,10 @@ $("#gratitudeForm").addEventListener("submit", async e => {
   e.target.reset();
   renderGratitudeChallenge();
   const stats = streakStats(localRows);
-  $("#gratitudeStatus").textContent = `오늘의 감사기도 완료! 현재 ${stats.current}일 연속 기록 중입니다. 🔥`;
+  let badgeMessage = "";
+  if (beforeStats.best < 30 && stats.best >= 30) badgeMessage = " 🏆 30일 감사습관 배지를 획득했습니다!";
+  else if (beforeStats.best < 7 && stats.best >= 7) badgeMessage = " 🏅 7일 감사습관 배지를 획득했습니다!";
+  $("#gratitudeStatus").textContent = `오늘의 감사기도 완료! 현재 ${stats.current}일 연속 기록 중입니다. 🔥${badgeMessage}`;
 });
 
 async function loadNotices() {
@@ -348,18 +421,19 @@ $("#adminLoginForm").addEventListener("submit", async e => {
   if (error) { $("#adminLoginStatus").textContent = "로그인 정보를 확인해 주세요."; return; }
   await verifyAdmin(data.user);
 });
+
 async function verifyAdmin(user) {
   if (!user) return setAdminState(false);
-  const { data } = await db.from("admin_users").select("user_id").eq("user_id",user.id).maybeSingle();
-  if (!data) {
+  const { data, error } = await db.from("admin_users").select("user_id").eq("user_id",user.id).maybeSingle();
+  if (error || !data) {
     await db.auth.signOut();
-    $("#adminLoginStatus").textContent = "관리자 권한이 없는 계정입니다.";
+    $("#adminLoginStatus").textContent = error ? dbErrorMessage(error, "관리자 권한 확인에 실패했습니다.") : "관리자 권한이 없는 계정입니다.";
     return setAdminState(false);
   }
   $("#adminLoginStatus").textContent = "";
   setAdminState(true);
-  if ($("#weeklyAdminStatus")) $("#weeklyAdminStatus").textContent = "관리자 저장 기능 v7 준비 완료.";
-  await loadAdminRecords();
+  $("#weeklyAdminStatus").textContent = "관리자 콘텐츠 편집 v8 준비 완료.";
+  await Promise.all([loadAdminWeeklyOptions(), loadAdminNoticeOptions(), loadAdminRecords()]);
 }
 function setAdminState(value) {
   isAdmin = value;
@@ -368,16 +442,132 @@ function setAdminState(value) {
   $("#adminLogoutBtn").classList.toggle("hidden", !value);
 }
 $("#adminLogoutBtn").addEventListener("click", async () => { await db.auth.signOut(); setAdminState(false); });
-$("#refreshAdminBtn").addEventListener("click", loadAdminRecords);
+$("#refreshAdminBtn").addEventListener("click", async () => {
+  await Promise.all([loadAdminWeeklyOptions(adminWeeklyId), loadAdminNoticeOptions(adminNoticeId), loadAdminRecords()]);
+});
+
+function currentMondayISO() {
+  const now = new Date();
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay()+6)%7));
+  return localISODate(monday);
+}
+
+function resetWeeklyEditor() {
+  adminWeeklyId = null;
+  $("#weeklyPicker").value = "__new__";
+  $("#weekStart").value = currentMondayISO();
+  $("#adminVerseRef").value = "";
+  $("#adminVerseText").value = "";
+  $("#adminStudyTitle").value = "";
+  $("#adminQ1").value = "";
+  $("#adminQ2").value = "";
+  $("#adminQ3").value = "";
+  $("#weeklyPublished").checked = true;
+  $("#weeklyModeLabel").textContent = "새 주차 등록 모드입니다.";
+  $("#weeklySubmitBtn").textContent = "말씀·문제 등록";
+  $("#weeklyAdminStatus").textContent = "새 말씀과 성경공부 문제를 입력해 주세요.";
+}
+
+async function loadAdminWeeklyOptions(preferredId = null) {
+  if (!isAdmin) return;
+  const { data, error } = await db.from("weekly_contents").select("*").order("week_start", {ascending:false});
+  if (error) {
+    $("#weeklyAdminStatus").textContent = dbErrorMessage(error, "기존 말씀 목록을 불러오지 못했습니다.");
+    return;
+  }
+  adminWeeklyRows = data || [];
+  $("#weeklyPicker").innerHTML = '<option value="__new__">＋ 새 주차 등록</option>' + adminWeeklyRows.map(r =>
+    `<option value="${escapeHtml(String(r.id))}">${escapeHtml(r.week_start || "날짜 없음")} · ${escapeHtml(r.verse_reference || "말씀 미입력")} · ${r.published ? "공개" : "비공개"}</option>`
+  ).join("");
+  const target = preferredId && adminWeeklyRows.some(r=>String(r.id)===String(preferredId))
+    ? String(preferredId)
+    : (adminWeeklyRows[0] ? String(adminWeeklyRows[0].id) : "__new__");
+  $("#weeklyPicker").value = target;
+  if (target === "__new__") resetWeeklyEditor();
+  else await loadAdminWeeklyEditor(target);
+}
+
+async function loadAdminWeeklyEditor(id) {
+  const row = adminWeeklyRows.find(r => String(r.id) === String(id));
+  if (!row) return resetWeeklyEditor();
+  adminWeeklyId = String(row.id);
+  $("#weekStart").value = row.week_start || currentMondayISO();
+  $("#adminVerseRef").value = row.verse_reference || "";
+  $("#adminVerseText").value = row.verse_text || "";
+  $("#adminStudyTitle").value = row.study_title || "";
+  $("#weeklyPublished").checked = Boolean(row.published);
+  $("#weeklyModeLabel").textContent = `${row.week_start || "날짜 없음"} 기록을 수정 중입니다.`;
+  $("#weeklySubmitBtn").textContent = "말씀·문제 수정 저장";
+  $("#weeklyAdminStatus").textContent = "기존 말씀과 성경공부 문제를 불러왔습니다.";
+  const { data, error } = await db.from("study_questions").select("*").eq("weekly_content_id", row.id).order("question_order");
+  if (error) {
+    $("#weeklyAdminStatus").textContent = dbErrorMessage(error, "성경공부 문제를 불러오지 못했습니다.");
+    return;
+  }
+  const qs = data || [];
+  $("#adminQ1").value = qs[0]?.question_text || "";
+  $("#adminQ2").value = qs[1]?.question_text || "";
+  $("#adminQ3").value = qs[2]?.question_text || "";
+}
+
+$("#weeklyPicker").addEventListener("change", async e => {
+  if (e.target.value === "__new__") resetWeeklyEditor();
+  else await loadAdminWeeklyEditor(e.target.value);
+});
+$("#newWeeklyBtn").addEventListener("click", resetWeeklyEditor);
+
+async function directSaveWeekly(payload, qs) {
+  let wid = adminWeeklyId;
+  if (wid) {
+    const upd = await db.from("weekly_contents").update(payload).eq("id", wid).select("id").maybeSingle();
+    if (upd.error) return {error:upd.error};
+    if (!upd.data?.id) return {error:{code:"PGRST116",message:"수정 대상 말씀을 다시 읽지 못했습니다."}};
+    wid = String(upd.data.id);
+  } else {
+    const existing = await db.from("weekly_contents").select("id").eq("week_start", payload.week_start).limit(1).maybeSingle();
+    if (existing.error) return {error:existing.error};
+    if (existing.data?.id) {
+      const upd = await db.from("weekly_contents").update(payload).eq("id", existing.data.id).select("id").maybeSingle();
+      if (upd.error) return {error:upd.error};
+      wid = String(existing.data.id);
+    } else {
+      const ins = await db.from("weekly_contents").insert(payload).select("id").single();
+      if (ins.error) return {error:ins.error};
+      wid = String(ins.data.id);
+    }
+  }
+  const del = await db.from("study_questions").delete().eq("weekly_content_id", wid);
+  if (del.error) return {error:del.error, partial:true};
+  const insQ = await db.from("study_questions").insert(qs.map((text,i)=>({
+    weekly_content_id: wid, question_order:i+1, question_text:text
+  })));
+  if (insQ.error) return {error:insQ.error, partial:true};
+  return {id:wid};
+}
+
+async function saveWeeklyContent(payload, qs) {
+  const rpc = await db.rpc("youth_admin_save_weekly", {
+    p_content_id: adminWeeklyId || null,
+    p_week_start: payload.week_start,
+    p_verse_reference: payload.verse_reference,
+    p_verse_text: payload.verse_text,
+    p_study_title: payload.study_title,
+    p_published: payload.published,
+    p_questions: qs
+  });
+  if (!rpc.error) return {id:String(rpc.data)};
+  // SQL 함수를 아직 적용하지 않은 경우에만 기존 Data API 방식으로 자동 대체합니다.
+  if (["PGRST202","42883"].includes(rpc.error.code) || String(rpc.error.message || "").includes("youth_admin_save_weekly")) {
+    return directSaveWeekly(payload, qs);
+  }
+  return {error:rpc.error};
+}
 
 $("#weeklyForm").addEventListener("submit", async e => {
   e.preventDefault();
   const status = $("#weeklyAdminStatus");
-  if (!isAdmin) {
-    status.textContent = "관리자 로그인 후 저장해 주세요.";
-    return;
-  }
-
+  if (!isAdmin) { status.textContent = "관리자 로그인 후 저장해 주세요."; return; }
   const payload = {
     week_start: $("#weekStart").value,
     verse_reference: clean($("#adminVerseRef").value),
@@ -385,168 +575,111 @@ $("#weeklyForm").addEventListener("submit", async e => {
     study_title: clean($("#adminStudyTitle").value),
     published: $("#weeklyPublished").checked
   };
-  const qs = [
-    clean($("#adminQ1").value),
-    clean($("#adminQ2").value),
-    clean($("#adminQ3").value)
-  ].filter(Boolean);
-
+  const qs = [clean($("#adminQ1").value), clean($("#adminQ2").value), clean($("#adminQ3").value)].filter(Boolean);
   if (!payload.week_start || !payload.verse_reference || !payload.verse_text || !payload.study_title || qs.length < 2) {
     status.textContent = "주 시작일, 말씀, 성경공부 제목과 질문 2개 이상을 입력해 주세요.";
     return;
   }
-
-  status.textContent = "저장 중입니다…";
-
-  // 저장 직전 세션과 관리자 권한을 다시 확인합니다.
-  const { data: userData, error: userError } = await db.auth.getUser();
-  if (userError || !userData?.user) {
-    status.textContent = "로그인 세션이 만료되었습니다. 관리자 로그아웃 후 다시 로그인해 주세요.";
+  const wasEditing = Boolean(adminWeeklyId);
+  status.textContent = wasEditing ? "기존 말씀과 문제를 수정하고 있습니다…" : "새 말씀과 문제를 등록하고 있습니다…";
+  $("#weeklySubmitBtn").disabled = true;
+  const result = await saveWeeklyContent(payload, qs);
+  $("#weeklySubmitBtn").disabled = false;
+  if (result.error) {
+    status.textContent = dbErrorMessage(result.error, wasEditing ? "말씀·성경공부 수정에 실패했습니다." : "말씀·성경공부 등록에 실패했습니다.");
     return;
   }
-  const adminCheck = await db.from("admin_users")
-    .select("user_id")
-    .eq("user_id", userData.user.id)
-    .maybeSingle();
-  if (adminCheck.error) {
-    status.textContent = dbErrorMessage(adminCheck.error, "관리자 권한 확인에 실패했습니다.");
-    return;
-  }
-  if (!adminCheck.data) {
-    status.textContent = "현재 로그인 계정이 admin_users에 등록되어 있지 않습니다.";
-    return;
-  }
-
-  // 같은 week_start가 있으면 UPDATE, 없으면 INSERT.
-  const existing = await db.from("weekly_contents")
-    .select("id")
-    .eq("week_start", payload.week_start)
-    .maybeSingle();
-  if (existing.error) {
-    status.textContent = dbErrorMessage(existing.error, "기존 말씀 확인에 실패했습니다.");
-    return;
-  }
-
-  let wid = existing.data?.id || null;
-  if (wid) {
-    const upd = await db.from("weekly_contents")
-      .update(payload)
-      .eq("id", wid);
-    if (upd.error) {
-      status.textContent = dbErrorMessage(upd.error, "말씀 수정 저장에 실패했습니다.");
-      return;
-    }
-  } else {
-    const ins = await db.from("weekly_contents")
-      .insert(payload)
-      .select("id")
-      .single();
-    if (ins.error || !ins.data?.id) {
-      status.textContent = dbErrorMessage(ins.error, "새 말씀 저장에 실패했습니다.");
-      return;
-    }
-    wid = ins.data.id;
-  }
-
-  // 질문은 해당 주의 기존 항목을 지우고 2~3개를 다시 저장합니다.
-  const del = await db.from("study_questions")
-    .delete()
-    .eq("weekly_content_id", wid);
-  if (del.error) {
-    status.textContent = dbErrorMessage(del.error, "말씀은 저장됐지만 기존 성경공부 질문 삭제에 실패했습니다.");
-    return;
-  }
-
-  const qres = await db.from("study_questions").insert(
-    qs.map((text, i) => ({
-      weekly_content_id: wid,
-      question_order: i + 1,
-      question_text: text
-    }))
-  );
-  if (qres.error) {
-    status.textContent = dbErrorMessage(qres.error, "말씀은 저장됐지만 성경공부 질문 저장에 실패했습니다.");
-    return;
-  }
-
-  // 저장된 행을 다시 읽어 화면 상태를 동기화합니다.
-  const reread = await db.from("weekly_contents")
-    .select("*")
-    .eq("id", wid)
-    .maybeSingle();
-  if (reread.error) {
-    status.textContent = dbErrorMessage(reread.error, "저장은 완료됐지만 화면 갱신용 조회에 실패했습니다.");
-    return;
-  }
-  weekly = reread.data || { id: wid, ...payload };
-  status.textContent = "말씀과 성경공부 문제가 저장되었습니다.";
-
-  if (payload.published) {
-    await loadWeekly();
-  } else {
-    await loadQuestions();
-  }
+  adminWeeklyId = result.id;
+  await loadAdminWeeklyOptions(adminWeeklyId);
+  await loadWeekly();
   await loadAdminRecords();
+  status.textContent = wasEditing ? "말씀과 성경공부 문제가 수정되었습니다." : "말씀과 성경공부 문제가 등록되었습니다.";
 });
+
+function resetNoticeEditor() {
+  adminNoticeId = null;
+  $("#noticePicker").value = "__new__";
+  $("#noticeTitle").value = "";
+  $("#noticeDate").value = "";
+  $("#noticeBody").value = "";
+  $("#noticeBanner").checked = true;
+  $("#noticePublished").checked = true;
+  $("#noticeModeLabel").textContent = "새 공지 등록 모드입니다.";
+  $("#noticeSubmitBtn").textContent = "공지 등록";
+  $("#noticeAdminStatus").textContent = "새 공지 내용을 입력해 주세요.";
+}
+
+async function loadAdminNoticeOptions(preferredId = null) {
+  if (!isAdmin) return;
+  const { data, error } = await db.from("notices").select("*").order("created_at", {ascending:false});
+  if (error) {
+    $("#noticeAdminStatus").textContent = dbErrorMessage(error, "공지 목록을 불러오지 못했습니다.");
+    return;
+  }
+  adminNoticeRows = data || [];
+  $("#noticePicker").innerHTML = '<option value="__new__">＋ 새 공지 등록</option>' + adminNoticeRows.map(n =>
+    `<option value="${escapeHtml(String(n.id))}">${escapeHtml(n.event_date || "일정 없음")} · ${escapeHtml(n.title || "제목 없음")} · ${n.published ? "공개" : "비공개"}</option>`
+  ).join("");
+  const target = preferredId && adminNoticeRows.some(n=>String(n.id)===String(preferredId))
+    ? String(preferredId)
+    : "__new__";
+  $("#noticePicker").value = target;
+  if (target === "__new__") resetNoticeEditor();
+  else loadAdminNoticeEditor(target);
+}
+
+function loadAdminNoticeEditor(id) {
+  const row = adminNoticeRows.find(n => String(n.id) === String(id));
+  if (!row) return resetNoticeEditor();
+  adminNoticeId = String(row.id);
+  $("#noticeTitle").value = row.title || "";
+  $("#noticeDate").value = row.event_date || "";
+  $("#noticeBody").value = row.body || "";
+  $("#noticeBanner").checked = Boolean(row.banner);
+  $("#noticePublished").checked = Boolean(row.published);
+  $("#noticeModeLabel").textContent = `“${row.title || "제목 없음"}” 공지를 수정 중입니다.`;
+  $("#noticeSubmitBtn").textContent = "공지 수정 저장";
+  $("#noticeAdminStatus").textContent = "기존 공지 내용을 불러왔습니다.";
+}
+
+$("#noticePicker").addEventListener("change", e => {
+  if (e.target.value === "__new__") resetNoticeEditor();
+  else loadAdminNoticeEditor(e.target.value);
+});
+$("#newNoticeBtn").addEventListener("click", resetNoticeEditor);
 
 $("#noticeAdminForm").addEventListener("submit", async e => {
   e.preventDefault();
   const status = $("#noticeAdminStatus");
-  if (!isAdmin) {
-    status.textContent = "관리자 로그인 후 공지를 등록해 주세요.";
-    return;
-  }
-
+  if (!isAdmin) { status.textContent = "관리자 로그인 후 저장해 주세요."; return; }
   const payload = {
     title: clean($("#noticeTitle").value),
     event_date: $("#noticeDate").value || null,
     body: clean($("#noticeBody").value),
     banner: $("#noticeBanner").checked,
-    published: true
+    published: $("#noticePublished").checked
   };
-
-  if (!payload.title || !payload.body) {
-    status.textContent = "공지 제목과 내용을 입력해 주세요.";
+  if (!payload.title || !payload.body) { status.textContent = "공지 제목과 내용을 입력해 주세요."; return; }
+  const wasEditing = Boolean(adminNoticeId);
+  status.textContent = wasEditing ? "공지를 수정하고 있습니다…" : "공지를 등록하고 있습니다…";
+  $("#noticeSubmitBtn").disabled = true;
+  let result;
+  if (adminNoticeId) result = await db.from("notices").update(payload).eq("id", adminNoticeId).select("id").maybeSingle();
+  else result = await db.from("notices").insert(payload).select("id").single();
+  $("#noticeSubmitBtn").disabled = false;
+  if (result.error || !result.data?.id) {
+    status.textContent = dbErrorMessage(result.error, wasEditing ? "공지 수정에 실패했습니다." : "공지 등록에 실패했습니다.");
     return;
   }
-
-  status.textContent = "공지사항 저장 중입니다…";
-
-  const { data: userData, error: userError } = await db.auth.getUser();
-  if (userError || !userData?.user) {
-    status.textContent = "로그인 세션이 만료되었습니다. 관리자 로그아웃 후 다시 로그인해 주세요.";
-    return;
-  }
-
-  const adminCheck = await db.from("admin_users")
-    .select("user_id")
-    .eq("user_id", userData.user.id)
-    .maybeSingle();
-  if (adminCheck.error) {
-    status.textContent = dbErrorMessage(adminCheck.error, "관리자 권한 확인에 실패했습니다.");
-    return;
-  }
-  if (!adminCheck.data) {
-    status.textContent = "현재 로그인 계정이 admin_users에 등록되어 있지 않습니다.";
-    return;
-  }
-
-  const { error } = await db.from("notices").insert(payload);
-  if (error) {
-    status.textContent = dbErrorMessage(error, "공지 등록에 실패했습니다.");
-    return;
-  }
-
-  status.textContent = "공지사항이 등록되었습니다.";
-  e.target.reset();
-  $("#noticeBanner").checked = true;
+  adminNoticeId = String(result.data.id);
   await loadNotices();
-  await loadAdminRecords();
+  await loadAdminNoticeOptions(adminNoticeId);
+  status.textContent = wasEditing ? "공지사항이 수정되었습니다." : "공지사항이 등록되었습니다.";
 });
 
 async function loadAdminRecords() {
   if(!isAdmin)return;
-  const weekId = weekly?.id;
+  const weekId = adminWeeklyId || weekly?.id;
   const [a,s,p,g,b] = await Promise.all([
     weekId ? db.from("attendance").select("*").eq("weekly_content_id",weekId).order("completed_at",{ascending:false}) : Promise.resolve({data:[]}),
     weekId ? db.from("study_submissions").select("*").eq("weekly_content_id",weekId).order("submitted_at",{ascending:false}) : Promise.resolve({data:[]}),
@@ -567,10 +700,7 @@ async function loadAdminRecords() {
   $("#adminRecords").innerHTML=rows.length?rows.join(""):'<p class="muted">이번 주 제출 기록이 없습니다.</p>';
 }
 
-const today = new Date();
-const monday = new Date(today);
-monday.setDate(today.getDate() - ((today.getDay()+6)%7));
-$("#weekStart").value=[monday.getFullYear(),String(monday.getMonth()+1).padStart(2,"0"),String(monday.getDate()).padStart(2,"0")].join("-");
+$("#weekStart").value = currentMondayISO();
 
 const { data:{session} } = await db.auth.getSession();
 if(session?.user) await verifyAdmin(session.user);

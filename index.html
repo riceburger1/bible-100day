@@ -3,210 +3,291 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#fff7e8" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="주의울림" />
-  <meta name="application-name" content="주의울림 말씀 100일" />
-  <meta name="description" content="양정중앙교회 청소년부 주의울림 - 잠언 말씀읽고 쓰기 도전 100일" />
+  <meta name="theme-color" content="#1f4d3f" />
+  <meta name="description" content="양정중앙교회 청소년부 주의울림 예배 앱" />
   <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
-  <title>말씀읽고 쓰기 도전 100일</title>
-  <style>
-    :root{--bg:#fffaf1;--card:#fff;--ink:#2f2a25;--muted:#7b746c;--line:#eee2d2;--accent:#e49b3e;--accent2:#8f5d2f;--good:#2f8f63;--bad:#c24a47;--soft:#fff2da;--shadow:0 12px 35px rgba(80,55,25,.10)}
-    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:linear-gradient(180deg,#fff8e9 0%,#fffdf9 46%,#f8f4ed 100%);color:var(--ink);font-family:ui-rounded,"Pretendard","Noto Sans KR",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:760px;margin:0 auto;min-height:100vh;padding-bottom:96px}.hero{padding:24px 18px 16px}.brand{display:flex;align-items:center;gap:10px;color:var(--accent2);font-weight:900;letter-spacing:-.03em}.brand-mark{width:38px;height:38px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:22px;box-shadow:inset 0 0 0 1px #f0d7b3}h1{font-size:clamp(25px,5.5vw,36px);line-height:1.15;margin:14px 0 8px;letter-spacing:-.05em}.ministry-brand{text-align:center;margin:18px 0 10px;padding:20px 14px;border-radius:26px;background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(255,246,227,.92));border:1px solid var(--line);box-shadow:var(--shadow)}.church-name{font-size:clamp(15px,3.6vw,20px);font-weight:900;color:#6f6254;letter-spacing:-.03em}.ministry-name{font-size:clamp(46px,12vw,68px);font-weight:1000;line-height:1;margin-top:8px;color:#2f2a25;letter-spacing:-.08em}.ministry-tag{margin-top:8px;font-size:13px;color:var(--accent2);font-weight:800}.subtitle{color:var(--muted);font-size:15px;line-height:1.6;margin:0}.status-row{display:grid;grid-template-columns:1.1fr .9fr;gap:12px;margin-top:20px}.status-card{background:rgba(255,255,255,.88);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:var(--shadow)}.status-label{font-size:12px;color:var(--muted);font-weight:700}.status-value{font-size:28px;font-weight:900;margin-top:5px;letter-spacing:-.04em}.status-small{font-size:13px;color:var(--muted);margin-top:4px}main{padding:0 18px}.view{display:none}.view.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:20px;box-shadow:var(--shadow);margin:10px 0 16px}.eyebrow{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:var(--soft);color:var(--accent2);font-size:12px;font-weight:800}.verse-ref{font-size:24px;font-weight:900;margin:13px 0 10px;letter-spacing:-.04em}.verse{white-space:pre-wrap;line-height:1.9;font-size:17px;background:#fffaf3;border:1px dashed #ead1aa;padding:16px;border-radius:18px;color:#41382e}.verse.empty{color:var(--muted);font-style:italic}.hint{font-size:13px;line-height:1.55;color:var(--muted);margin:12px 2px 0}.cta{width:100%;border:0;border-radius:18px;padding:15px 18px;background:linear-gradient(135deg,var(--accent),#cb7a28);color:#fff;font-weight:900;font-size:16px;box-shadow:0 10px 24px rgba(213,133,46,.25)}.cta:disabled{opacity:.45;box-shadow:none;cursor:not-allowed}.secondary{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 16px;background:#fff;color:var(--ink);font-weight:800}.danger{border-color:#efc8c8;color:#a33}.success-box{display:none;border-radius:20px;padding:18px;background:#eef8f2;border:1px solid #cee8d7;margin-top:14px;text-align:center}.success-box.show{display:block}.success-icon{font-size:42px}.success-title{font-weight:900;font-size:20px;margin:5px 0}.success-copy{font-size:13px;color:#557060}.profile{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.chip{font-size:12px;background:#f6f1e9;border:1px solid #ebe0d0;padding:7px 10px;border-radius:999px;color:#685f55}.grid-stamps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.stamp{aspect-ratio:1;border:1px solid var(--line);background:#fff;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;overflow:hidden}.stamp strong{font-size:14px}.stamp span{font-size:10px;color:var(--muted)}.stamp.done{background:#eef9f2;border-color:#b9dfc7}.stamp.done:after{content:"성공";position:absolute;inset:auto 5px 5px auto;border:2px solid var(--good);color:var(--good);border-radius:50%;width:38px;height:38px;display:grid;place-items:center;font-size:10px;font-weight:900;transform:rotate(-12deg);background:rgba(255,255,255,.8)}.stamp.missed{background:#fff1f0;border-color:#efc4c2}.stamp.missed:after{content:"실패";position:absolute;inset:auto 5px 5px auto;border:2px solid var(--bad);color:var(--bad);border-radius:50%;width:38px;height:38px;display:grid;place-items:center;font-size:10px;font-weight:900;transform:rotate(9deg);background:rgba(255,255,255,.82)}.stamp.today{outline:3px solid rgba(228,155,62,.28);background:#fffaf0}.stamp.future{opacity:.72}.result-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.result-pill{border:1px solid var(--line);border-radius:16px;padding:12px 8px;text-align:center;background:#fff}.result-pill b{display:block;font-size:22px;letter-spacing:-.04em}.result-pill span{font-size:11px;color:var(--muted);font-weight:800}.result-pill.success b{color:var(--good)}.result-pill.fail b{color:var(--bad)}.protected-verse{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.no-paste-note{display:flex;gap:8px;align-items:flex-start;margin-top:10px;padding:10px 12px;border-radius:14px;background:#fff4f2;border:1px solid #f2d0cc;color:#99504c;font-size:12px;font-weight:800;line-height:1.45}.section-title{font-size:22px;font-weight:900;letter-spacing:-.04em;margin:8px 0 14px}.progress{height:10px;background:#f1e9dd;border-radius:999px;overflow:hidden}.progress>i{display:block;height:100%;background:linear-gradient(90deg,#e7aa51,#d97f29);border-radius:inherit;width:0}.progress-copy{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--muted)}.field{margin:12px 0}.field label{display:block;font-size:12px;color:var(--muted);font-weight:800;margin:0 0 6px}.input,.textarea,.select{width:100%;border:1px solid #ded5ca;background:#fff;border-radius:14px;padding:12px 13px;outline:none}.input:focus,.textarea:focus,.select:focus{border-color:#e4a65a;box-shadow:0 0 0 4px rgba(228,155,62,.12)}.textarea{min-height:150px;resize:vertical;line-height:1.6}.admin-login{max-width:460px;margin:20px auto}.admin-panel{display:none}.admin-panel.show{display:block}.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.admin-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 16px}.stat{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fffaf5}.stat b{display:block;font-size:22px}.stat span{font-size:11px;color:var(--muted)}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 8px;border-bottom:1px solid #eee6dd;text-align:left}th{color:#746c62;background:#fbf8f4;position:sticky;top:0}.table-wrap{max-height:430px;overflow:auto;border:1px solid var(--line);border-radius:14px}.nav{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:min(724px,calc(100% - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border:1px solid #e9ded1;padding:8px;border-radius:22px;box-shadow:0 14px 40px rgba(55,37,20,.16);z-index:20}.nav button{border:0;background:transparent;border-radius:15px;padding:9px 4px;color:#857c73;font-size:11px;font-weight:800}.nav button b{display:block;font-size:19px;margin-bottom:2px}.nav button.active{background:#fff2da;color:#9b622c}footer{text-align:center;padding:28px 20px 22px;color:#7e756c;font-weight:800}.footer-church{display:block;font-size:12px;letter-spacing:.02em}.footer-ministry{display:block;margin-top:4px;font-size:24px;font-weight:1000;color:#4a4036;letter-spacing:-.05em}.modal{position:fixed;inset:0;background:rgba(37,29,21,.46);display:none;align-items:flex-end;justify-content:center;padding:12px;z-index:50}.modal.show{display:flex}.sheet{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:28px 28px 20px 20px;padding:20px;box-shadow:0 -20px 50px rgba(0,0,0,.18)}.sheet-handle{width:46px;height:5px;border-radius:999px;background:#ddd4ca;margin:0 auto 14px}.sheet h2{margin:0 0 4px;font-size:24px}.sheet p{margin:0;color:var(--muted);font-size:13px;line-height:1.55}.typebox{margin-top:14px;min-height:200px}.matchbar{font-size:12px;margin:8px 2px;color:var(--muted)}.matchbar.bad{color:var(--bad);font-weight:800}.matchbar.good{color:var(--good);font-weight:800}.modal-actions{display:grid;grid-template-columns:.7fr 1.3fr;gap:8px;margin-top:12px}.close-btn{border:1px solid var(--line);background:#fff;border-radius:16px;font-weight:800}.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-20px);background:#2e2a26;color:#fff;padding:12px 16px;border-radius:14px;font-size:13px;font-weight:800;opacity:0;pointer-events:none;transition:.22s;z-index:99}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.notice{font-size:12px;line-height:1.55;background:#f7f3ee;border:1px solid #e9dfd3;padding:12px 14px;border-radius:14px;color:#70675e}.online{color:var(--good)}.offline{color:var(--bad)}
-    .install-row{display:flex;gap:8px;align-items:center;margin-top:14px;flex-wrap:wrap}.install-btn{border:1px solid #e7c89e;background:#fff8eb;color:#8f5d2f;border-radius:14px;padding:10px 13px;font-weight:900;font-size:13px;box-shadow:0 6px 18px rgba(100,70,30,.08)}.install-btn[hidden]{display:none}.install-note{font-size:11px;color:var(--muted)}
-    @media(max-width:560px){.status-row{grid-template-columns:1fr 1fr}.status-value{font-size:24px}.grid-stamps{grid-template-columns:repeat(4,1fr)}.admin-grid,.admin-actions,.stats{grid-template-columns:1fr}.hero{padding-top:18px}.card{padding:17px}}
-  </style>
+  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./styles.css" />
+  <title>주의울림 | 양정중앙교회 청소년부</title>
 </head>
 <body>
-<div class="app">
-  <header class="hero">
-    <div class="brand"><div class="brand-mark">📖</div><span>말씀읽고 쓰기 도전 100일</span></div>
-    <div class="ministry-brand"><div class="church-name">양정중앙교회 청소년부</div><div class="ministry-name">주의울림</div><div class="ministry-tag">말씀으로 삶을 깨우는 100일의 도전</div></div>
-    <h1>하루 한 말씀, 100일의 믿음 습관</h1>
-    <p class="subtitle">잠언 말씀 3~4절을 눈으로 읽고 손으로 따라 쓰며 하루의 말씀을 마음에 새겨요.</p>
-    <div class="install-row"><button id="installAppBtn" class="install-btn" hidden>📲 앱으로 설치</button><span id="installHint" class="install-note"></span></div>
-    <div class="status-row">
-      <div class="status-card"><div class="status-label">현재 도전</div><div id="dayStatus" class="status-value">DAY -</div><div id="dateStatus" class="status-small">설정 확인 중</div></div>
-      <div class="status-card"><div class="status-label">오늘 남은 시간</div><div id="countdown" class="status-value">--:--:--</div><div class="status-small">매일 24:00 말씀 변경</div></div>
-    </div>
-  </header>
-
-  <main>
-    <section id="view-home" class="view active">
-      <div class="card">
-        <div class="eyebrow">🌿 오늘의 잠언</div>
-        <div id="homeRef" class="verse-ref">오늘의 본문</div>
-        <div id="homeVerse" class="verse empty protected-verse">잠언 말씀을 준비하고 있습니다...</div>
-        <div class="hint">말씀을 정확히 따라 써야 도전이 완료됩니다. 글자나 단어가 다르면 등록되지 않습니다.</div><div class="hint">하루를 놓쳐도 괜찮아요. 다음 날부터 다시 이어서 참여할 수 있으며, 지나간 날은 성공/실패로 기록됩니다.</div>
-        <div class="hint">서버 상태: <b id="serverStatus">확인 중...</b></div>
-        <div id="profilePreview" class="profile"></div>
+  <div id="app">
+    <header class="hero">
+      <div class="brand">
+        <span class="church">양정중앙교회 청소년부</span>
+        <strong>주의울림</strong>
+        <span class="subtitle">말씀 · 나눔 · 기도 · 감사</span>
       </div>
-      <button id="startWriteBtn" class="cta">✍️ 오늘 말씀 따라쓰기</button>
-      <div id="alreadyDone" class="success-box"><div class="success-icon">✅</div><div class="success-title">오늘 도전 완료!</div><div class="success-copy">도장판에 오늘 날짜 도장이 찍혔어요.</div></div>
-      <div class="card" style="margin-top:16px"><div class="section-title">나의 100일 기록</div><div class="progress"><i id="homeProgress"></i></div><div class="progress-copy"><span id="homeProgressText">성공 0회</span><span>100일</span></div><div class="result-summary"><div class="result-pill success"><b id="homeSuccessCount">0</b><span>성공 횟수</span></div><div class="result-pill fail"><b id="homeFailCount">0</b><span>실패 횟수</span></div><div class="result-pill"><b id="homeRemainCount">100</b><span>남은 날</span></div></div></div>
-    </section>
+      <button id="installBtn" class="ghost hidden" type="button">앱 설치</button>
+    </header>
 
-    <section id="view-write" class="view"><div class="card"><div class="section-title">오늘 말씀 따라쓰기</div><p class="hint">학년과 이름을 확인한 뒤 오늘의 말씀을 직접 입력하세요. 성공 기록은 교회 관리자 화면에 실시간으로 저장됩니다.</p><div class="no-paste-note">🔒 오늘의 말씀은 복사하거나 입력창에 붙여넣을 수 없습니다. 직접 읽고 입력해 주세요.</div><button id="openWriterBtn" class="cta" style="margin-top:14px">입력 시작하기</button></div></section>
+    <section id="bannerArea" class="banner-wrap"></section>
 
-    <section id="view-stamps" class="view">
-      <div class="card"><div class="section-title">100일 도장판</div><div class="progress"><i id="stampProgress"></i></div><div class="progress-copy"><span id="stampProgressText">성공 0회</span><span id="stampUser">학생 정보 없음</span></div><div class="result-summary"><div class="result-pill success"><b id="stampSuccessCount">0</b><span>성공</span></div><div class="result-pill fail"><b id="stampFailCount">0</b><span>실패</span></div><div class="result-pill"><b id="stampPendingCount">100</b><span>남음/진행중</span></div></div><p class="hint">연속으로 하지 않아도 됩니다. 놓친 날은 실패로 표시되고, 다음 날부터 다시 이어서 도전할 수 있습니다.</p><p class="hint">개인 도장판은 이 기기에 저장됩니다. 전체 성공 제출 기록은 Supabase에 모여 관리자만 확인할 수 있습니다.</p></div>
-      <div id="stampGrid" class="grid-stamps"></div>
-    </section>
+    <main>
+      <nav class="tabs" aria-label="메뉴">
+        <button class="tab active" data-tab="word">말씀쓰기</button>
+        <button class="tab" data-tab="study">성경공부</button>
+        <button class="tab" data-tab="prayer">기도제목</button>
+        <button class="tab" data-tab="notice">공지사항</button>
+        <button class="tab" data-tab="gratitude">감사기도</button>
+        <button class="tab" data-tab="board">익명게시판</button>
+      </nav>
 
-    <section id="view-admin" class="view">
-      <div id="adminLogin" class="card admin-login">
-        <div class="section-title">관리자 로그인</div>
-        <div class="notice">관리자 PIN을 공개 코드에 넣지 않고 <b>Supabase Auth 이메일/비밀번호</b>로 로그인합니다. 관리자 목록에 등록된 계정만 학생 전체 기록을 볼 수 있습니다.</div>
-        <div class="field"><label>관리자 이메일</label><input id="adminEmail" class="input" type="email" autocomplete="username" placeholder="admin@example.com"></div>
-        <div class="field"><label>비밀번호</label><input id="adminPassword" class="input" type="password" autocomplete="current-password" placeholder="비밀번호"></div>
-        <button id="adminLoginBtn" class="cta">관리자 로그인</button>
-        <p id="adminLoginMessage" class="hint"></p>
-      </div>
-
-      <div id="adminPanel" class="admin-panel">
-        <div class="card">
-          <div class="section-title">오늘의 운영 현황</div>
-          <div class="stats"><div class="stat"><b id="statToday">0</b><span>오늘 완료</span></div><div class="stat"><b id="statStudents">0</b><span>누적 참여 학생</span></div><div class="stat"><b id="statTotal">0</b><span>누적 성공 기록</span></div></div>
-          <div class="admin-actions"><button id="refreshAdminBtn" class="secondary">🔄 새로고침</button><button id="exportCsvBtn" class="secondary">⬇ CSV 저장</button><button id="adminLogoutBtn" class="secondary">로그아웃</button></div>
+      <section id="studentIdentity" class="card identity-card">
+        <div>
+          <span class="eyebrow">나의 기록</span>
+          <h2>내 정보</h2>
+          <p>말씀쓰기·성경공부·기도제목·감사기도 기록에 이 정보가 사용됩니다.</p>
         </div>
-        <div class="card">
-          <div class="section-title">도전 기본 설정</div>
-          <div class="field"><label>도전 시작일</label><input id="startDateInput" class="input" type="date"></div>
-          <button id="saveStartDateBtn" class="secondary">시작일 저장</button>
-          <p class="hint">시작일을 바꾸면 모든 학생의 DAY 계산도 같은 기준으로 바뀝니다.</p>
+        <div class="identity-grid">
+          <label>학년
+            <select id="grade">
+              <option value="">학년 선택</option>
+              <option>중1</option><option>중2</option><option>중3</option>
+              <option>고1</option><option>고2</option><option>고3</option>
+            </select>
+          </label>
+          <label>이름
+            <input id="studentName" type="text" maxlength="30" autocomplete="name" placeholder="이름 입력" />
+          </label>
         </div>
-        <div class="card">
-          <div class="section-title">학생 입력 현황</div>
-          <div class="admin-grid"><div class="field"><label>DAY 필터</label><select id="filterDay" class="select"><option value="">전체 DAY</option></select></div><div class="field"><label>학년 필터</label><select id="filterGrade" class="select"><option value="">전체 학년</option><option>중1</option><option>중2</option><option>중3</option><option>고1</option><option>고2</option><option>고3</option></select></div></div>
-          <div class="table-wrap"><table><thead><tr><th>DAY</th><th>날짜</th><th>학년</th><th>이름</th><th>입력시각</th><th></th></tr></thead><tbody id="recordTbody"></tbody></table></div>
+        <p class="identity-tip">한 번 입력하면 이 기기에 저장되어 다음 접속 때 자동으로 불러옵니다.</p>
+      </section>
+
+      <section id="word" class="panel card">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">이번 주 말씀</span>
+            <h2 id="verseReference">불러오는 중...</h2>
+          </div>
+          <span id="progressText" class="pill">0%</span>
         </div>
-      </div>
-    </section>
-  </main>
-  <footer><span class="footer-church">양정중앙교회 청소년부</span><span class="footer-ministry">주의울림</span></footer>
-</div>
+        <blockquote id="verseText" class="verse">말씀을 불러오는 중입니다.</blockquote>
+        <div class="typing-note">
+          복사·붙여넣기, 드래그앤드롭 입력은 사용할 수 없습니다. 말씀을 직접 따라 써 주세요.
+        </div>
+        <label class="field-label">말씀 따라쓰기
+          <textarea id="verseInput" rows="7"
+            autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            placeholder="위 말씀을 직접 입력하세요."></textarea>
+        </label>
+        <div class="progress"><div id="progressBar"></div></div>
+        <p id="wordStatus" class="status">말씀을 불러오는 중입니다.</p>
+        <button id="completeWordBtn" class="primary" type="button" disabled>말씀쓰기 완료 및 출석</button>
+      </section>
 
-<nav class="nav" aria-label="하단 메뉴"><button class="active" data-view="home"><b>🏠</b>홈</button><button data-view="write"><b>✍️</b>말씀쓰기</button><button data-view="stamps"><b>🏅</b>도장판</button><button data-view="admin"><b>⚙️</b>관리자</button></nav>
+      <section id="study" class="panel card hidden">
+        <span class="eyebrow">이번 주 성경공부</span>
+        <h2 id="studyTitle">성경공부</h2>
+        <form id="studyForm">
+          <div id="studyQuestions"></div>
+          <button class="primary" type="submit">나눔 제출</button>
+          <p id="studyStatus" class="status"></p>
+        </form>
+      </section>
 
-<div id="writerModal" class="modal" role="dialog" aria-modal="true"><div class="sheet"><div class="sheet-handle"></div><h2>오늘 말씀 따라쓰기</h2><p id="writerRef">-</p><div class="admin-grid" style="margin-top:14px"><div class="field"><label>학년</label><select id="gradeInput" class="select"><option value="">선택</option><option>중1</option><option>중2</option><option>중3</option><option>고1</option><option>고2</option><option>고3</option></select></div><div class="field"><label>이름</label><input id="nameInput" class="input" type="text" maxlength="20" placeholder="이름"></div></div><div id="writerVerse" class="verse empty protected-verse">오늘 말씀을 불러오는 중...</div><textarea id="typingInput" class="textarea typebox" placeholder="위 말씀을 직접 읽고 입력해 주세요. (붙여넣기 불가)" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea><div class="no-paste-note">🔒 복사·붙여넣기와 드래그 입력이 차단되어 있습니다. 말씀을 직접 입력해 주세요.</div><div id="matchInfo" class="matchbar">아직 입력하지 않았어요.</div><div class="modal-actions"><button id="closeWriterBtn" class="close-btn">닫기</button><button id="submitBtn" class="cta">정확히 확인하고 등록</button></div></div></div>
-<div id="toast" class="toast"></div>
+      <section id="prayer" class="panel card hidden">
+        <span class="eyebrow">함께 기도해요</span>
+        <h2>이번 주 기도제목</h2>
+        <form id="prayerForm">
+          <label class="field-label">기도제목
+            <textarea id="prayerText" rows="6" maxlength="3000" placeholder="이번 주 기도제목을 적어 주세요."></textarea>
+          </label>
+          <label class="check-row"><input id="prayerPrivate" type="checkbox" checked /> 관리자만 확인</label>
+          <button class="primary" type="submit">기도제목 제출</button>
+          <p id="prayerStatus" class="status"></p>
+        </form>
+      </section>
 
-<script src="./config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.2/dist/umd/supabase.min.js"></script>
-<script>
-(() => {
-  'use strict';
-  const TZ='Asia/Seoul';
-  const LOCAL_KEY='yc_proverbs100_online_v1';
-  const PASSAGE_VERSION='kor1910_auto_v1';
-  const BIBLE_URLS=['https://raw.githubusercontent.com/jsbang01357/BibleFrame/main/site/bible.json','https://cdn.jsdelivr.net/gh/jsbang01357/BibleFrame@main/site/bible.json'];
-  const cfg=window.APP_CONFIG||{};
-  const configured=String(cfg.SUPABASE_URL||'').startsWith('https://') && !String(cfg.SUPABASE_URL).includes('PASTE_') && String(cfg.SUPABASE_PUBLISHABLE_KEY||'').startsWith('sb_publishable_');
-  const db=configured ? window.supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}) : null;
-  const defaultLocal={startDate:cfg.DEFAULT_START_DATE||'2026-08-31',passageVersion:'',passages:Array.from({length:100},(_,i)=>({day:i+1,ref:`잠언 DAY ${i+1}`,text:''})),profile:{grade:'',name:''},stamps:[]};
-  let state=loadLocal(); let loadingPassages=false; let adminRecords=[]; let isAdmin=false;
-  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-  function loadLocal(){try{const raw=JSON.parse(localStorage.getItem(LOCAL_KEY)||'null');return raw?{...structuredClone(defaultLocal),...raw,passages:Array.isArray(raw.passages)&&raw.passages.length===100?raw.passages:structuredClone(defaultLocal.passages),stamps:Array.isArray(raw.stamps)?raw.stamps:[]}:structuredClone(defaultLocal)}catch{return structuredClone(defaultLocal)}}
-  function saveLocal(){localStorage.setItem(LOCAL_KEY,JSON.stringify(state))}
-  function seoulParts(date=new Date()){const parts=new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(date);return Object.fromEntries(parts.filter(p=>p.type!=='literal').map(p=>[p.type,p.value]))}
-  function seoulDateStr(date=new Date()){const p=seoulParts(date);return `${p.year}-${p.month}-${p.day}`}
-  function midnightMs(s){return Date.parse(s+'T00:00:00+09:00')}
-  function dayInfo(){const today=seoulDateStr();const diff=Math.floor((midnightMs(today)-midnightMs(state.startDate))/86400000)+1;if(diff<1)return{day:1,raw:diff,status:'before'};if(diff>100)return{day:100,raw:diff,status:'after'};return{day:diff,raw:diff,status:'active'}}
-  function fmtDate(s){return new Intl.DateTimeFormat('ko-KR',{timeZone:TZ,month:'long',day:'numeric',weekday:'short'}).format(new Date(s+'T00:00:00+09:00'))}
-  function challengeDate(day){return new Date(midnightMs(state.startDate)+(day-1)*86400000).toISOString().slice(0,10)}
-  function normalizeText(s){return String(s||'').normalize('NFC').replace(/\s+/g,' ').trim()}
-  function passage(day){return state.passages[day-1]||{day,ref:`DAY ${day}`,text:''}}
-  function profileKey(){return `${state.profile.grade}|${state.profile.name}`}
-  function myDoneDays(){return new Set(state.stamps.filter(x=>x.profileKey===profileKey()).map(x=>x.day))}
-  function didToday(day=dayInfo().day){return !!state.profile.name && myDoneDays().has(day)}
-  function outcomeStats(){const done=myDoneDays(),info=dayInfo();let elapsed=0;if(info.status==='before')elapsed=0;else if(info.status==='active')elapsed=Math.max(0,info.day-1);else elapsed=100;let failed=0;for(let d=1;d<=elapsed;d++)if(!done.has(d))failed++;const success=done.size,pending=Math.max(0,100-success-failed);return{success,failed,pending,done,info}}
-  function stampState(day,done,info){if(done.has(day))return'done';if(info.status==='after')return'missed';if(info.status==='active'){if(day<info.day)return'missed';if(day===info.day)return'today';return'future'}return'future'}
-  function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
-  function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-  function setServerStatus(ok,msg){const el=$('#serverStatus');el.textContent=msg;el.className=ok?'online':'offline'}
+      <section id="notice" class="panel card hidden">
+        <span class="eyebrow">다가오는 일정</span>
+        <h2>공지사항</h2>
+        <div id="noticeList" class="list"></div>
+      </section>
 
-  function make100DayPlan(payload){const verses=(payload?.verses||[]).filter(v=>v.code==='PRO').sort((a,b)=>a.chapter-b.chapter||a.verse-b.verse);if(verses.length<300)throw new Error('잠언 본문 데이터 부족');const byChapter=new Map();for(const v of verses){if(!byChapter.has(v.chapter))byChapter.set(v.chapter,[]);byChapter.get(v.chapter).push(v)}const plan=[];const n=verses.length;for(let i=0;i<100;i++){const want=(i%3===0)?4:3,target=Math.round(i*(n-1)/99),chosen=verses[target],chapter=byChapter.get(chosen.chapter);let pos=chapter.findIndex(v=>v.verse===chosen.verse);pos=Math.min(Math.max(pos,0),Math.max(0,chapter.length-want));const slice=chapter.slice(pos,pos+want),first=slice[0],last=slice[slice.length-1];plan.push({day:i+1,ref:`잠언 ${first.chapter}:${first.verse}-${last.verse}`,text:slice.map(v=>`${v.verse} ${String(v.text).trim()}`).join('\n')})}return plan}
-  async function ensurePassages(force=false){const ready=state.passageVersion===PASSAGE_VERSION&&state.passages.length===100&&state.passages.every(p=>p.text);if(ready&&!force)return true;if(loadingPassages)return false;loadingPassages=true;$('#startWriteBtn').disabled=true;for(const url of BIBLE_URLS){try{const r=await fetch(url,{cache:'force-cache'});if(!r.ok)throw new Error(`HTTP ${r.status}`);state.passages=make100DayPlan(await r.json());state.passageVersion=PASSAGE_VERSION;saveLocal();loadingPassages=false;renderAll();return true}catch(e){console.warn(e)}}loadingPassages=false;$('#homeVerse').textContent='말씀 데이터를 불러오지 못했습니다. 인터넷 연결 후 새로고침해 주세요.';return false}
+      <section id="gratitude" class="panel card hidden">
+        <div class="section-head gratitude-head">
+          <div>
+            <span class="eyebrow">매일 한 가지 감사</span>
+            <h2>감사기도 챌린지</h2>
+            <p class="muted">하루에 한 번 감사기도를 남기고 연속 기록을 이어가 보세요.</p>
+          </div>
+          <div class="gratitude-flame" aria-hidden="true">🔥</div>
+        </div>
 
-  async function syncSettings(){if(!db){setServerStatus(false,'Supabase 설정 필요');return false}try{const {data,error}=await db.from('app_settings').select('start_date').eq('id',true).single();if(error)throw error;state.startDate=data.start_date;saveLocal();setServerStatus(true,'온라인 연결됨');return true}catch(e){console.error(e);setServerStatus(false,'서버 연결 실패');return false}}
+        <div class="challenge-stats">
+          <div class="challenge-stat main"><span>현재 연속</span><strong id="gratitudeStreak">0일</strong></div>
+          <div class="challenge-stat"><span>최고 연속</span><strong id="gratitudeBest">0일</strong></div>
+          <div class="challenge-stat"><span>오늘</span><strong id="gratitudeToday">미기록</strong></div>
+        </div>
 
-  function renderHeader(){const info=dayInfo(),today=seoulDateStr();if(info.status==='before'){$('#dayStatus').textContent=`D-${Math.ceil((midnightMs(state.startDate)-midnightMs(today))/86400000)}`;$('#dateStatus').textContent=`${fmtDate(state.startDate)} 시작`}else if(info.status==='after'){$('#dayStatus').textContent='100일 완료';$('#dateStatus').textContent='도전 기간이 끝났어요'}else{$('#dayStatus').textContent=`DAY ${info.day}`;$('#dateStatus').textContent=`${fmtDate(today)} · ${info.day}일째`}}
-  function renderCountdown(){const p=seoulParts();let rem=86400-((+p.hour)*3600+(+p.minute)*60+(+p.second));if(rem===86400)rem=0;const h=String(Math.floor(rem/3600)).padStart(2,'0');rem%=3600;const m=String(Math.floor(rem/60)).padStart(2,'0'),s=String(rem%60).padStart(2,'0');$('#countdown').textContent=`${h}:${m}:${s}`}
-  function renderHome(){const info=dayInfo(),p=passage(info.day),stats=outcomeStats();$('#homeRef').textContent=p.ref||`DAY ${info.day}`;$('#homeVerse').textContent=p.text||(loadingPassages?'잠언 말씀을 준비하고 있습니다...':'잠언 말씀 데이터가 아직 없습니다.');$('#homeVerse').classList.toggle('empty',!p.text);$('#startWriteBtn').disabled=info.status!=='active'||!p.text||didToday(info.day)||!configured;$('#alreadyDone').classList.toggle('show',didToday(info.day));$('#homeProgress').style.width=`${stats.success}%`;$('#homeProgressText').textContent=`성공 ${stats.success}회`;$('#homeSuccessCount').textContent=stats.success;$('#homeFailCount').textContent=stats.failed;$('#homeRemainCount').textContent=stats.pending;$('#profilePreview').innerHTML=state.profile.name?`<span class="chip">${esc(state.profile.grade)}</span><span class="chip">${esc(state.profile.name)}</span>`:''}
-  function renderStamps(){const stats=outcomeStats(),done=stats.done,info=stats.info;$('#stampProgress').style.width=`${stats.success}%`;$('#stampProgressText').textContent=`성공 ${stats.success}회 · 실패 ${stats.failed}회`;$('#stampSuccessCount').textContent=stats.success;$('#stampFailCount').textContent=stats.failed;$('#stampPendingCount').textContent=stats.pending;$('#stampUser').textContent=state.profile.name?`${state.profile.grade} ${state.profile.name}`:'학생 정보 없음';const grid=$('#stampGrid');grid.innerHTML='';for(let d=1;d<=100;d++){const stateName=stampState(d,done,info),el=document.createElement('div');el.className=`stamp ${stateName}`;const sub=stateName==='today'?'오늘':stateName==='future'?'예정':challengeDate(d).slice(5).replace('-','.');el.innerHTML=`<strong>DAY ${d}</strong><span>${sub}</span>`;grid.appendChild(el)}}
-  function renderAll(){renderHeader();renderCountdown();renderHome();renderStamps()}
+        <section class="gratitude-calendar-card" aria-labelledby="gratitudeCalendarTitle">
+          <div class="calendar-toolbar">
+            <div>
+              <span class="eyebrow">나의 감사 달력</span>
+              <h3 id="gratitudeCalendarTitle">감사 기록 달력</h3>
+            </div>
+            <div class="calendar-nav" aria-label="감사 달력 월 이동">
+              <button id="gratitudePrevMonth" class="calendar-nav-btn" type="button" aria-label="이전 달">‹</button>
+              <strong id="gratitudeCalendarMonth">이번 달</strong>
+              <button id="gratitudeNextMonth" class="calendar-nav-btn" type="button" aria-label="다음 달">›</button>
+            </div>
+          </div>
+          <div class="calendar-legend" aria-label="달력 표시 안내">
+            <span><b>🔥</b> 현재 연속 기록</span>
+            <span><b>✅</b> 완료 기록</span>
+          </div>
+          <div class="calendar-weekdays" aria-hidden="true">
+            <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+          </div>
+          <div id="gratitudeCalendar" class="gratitude-calendar" role="grid" aria-label="감사기도 기록 달력"></div>
+          <div class="calendar-summary">
+            <strong id="gratitudeMonthCount">이번 달 0일 기록</strong>
+            <span id="gratitudeCalendarHint">감사기도를 기록한 날에 표시가 생깁니다.</span>
+          </div>
+        </section>
 
-  function openWriter(){const info=dayInfo(),p=passage(info.day);if(!configured)return toast('먼저 Supabase 설정을 완료해 주세요.');if(info.status!=='active')return toast('현재는 도전 입력 기간이 아닙니다.');if(!p.text)return toast('말씀을 불러오는 중입니다.');if(didToday(info.day))return toast('오늘 도전은 이미 완료했어요!');$('#writerRef').textContent=p.ref;$('#writerVerse').textContent=p.text;$('#writerVerse').classList.remove('empty');$('#gradeInput').value=state.profile.grade||'';$('#nameInput').value=state.profile.name||'';$('#typingInput').value='';updateMatch();$('#writerModal').classList.add('show')}
-  function closeWriter(){$('#writerModal').classList.remove('show')}
-  function updateMatch(){const target=normalizeText(passage(dayInfo().day).text),typed=normalizeText($('#typingInput').value),el=$('#matchInfo');el.className='matchbar';if(!typed){el.textContent='아직 입력하지 않았어요.';return}if(typed===target){el.textContent='✓ 말씀과 정확히 일치합니다.';el.classList.add('good')}else{el.textContent='아직 말씀과 일치하지 않습니다. 틀린 글자를 확인해 주세요.';el.classList.add('bad')}}
-  async function submit(){const grade=$('#gradeInput').value.trim(),name=$('#nameInput').value.trim();if(!grade||!name)return toast('학년과 이름을 입력해 주세요.');const info=dayInfo(),target=normalizeText(passage(info.day).text),typed=normalizeText($('#typingInput').value);if(target!==typed)return toast('글자가 달라서 등록되지 않았어요. 다시 확인해 주세요.');if(!db)return toast('서버 설정이 완료되지 않았습니다.');$('#submitBtn').disabled=true;$('#submitBtn').textContent='등록 중...';try{const {error}=await db.from('challenge_submissions').insert({challenge_day:info.day,grade,student_name:name});if(error){if(error.code==='23505')throw new Error('이미 오늘 도전을 완료한 이름입니다.');throw error}state.profile={grade,name};const pk=`${grade}|${name}`;if(!state.stamps.some(x=>x.day===info.day&&x.profileKey===pk))state.stamps.push({day:info.day,profileKey:pk,date:seoulDateStr(),at:new Date().toISOString()});saveLocal();closeWriter();renderAll();showView('stamps');toast('성공! 서버에 저장되고 도장이 찍혔어요 🎉')}catch(e){console.error(e);toast(e.message||'등록에 실패했습니다. 인터넷 연결을 확인해 주세요.')}finally{$('#submitBtn').disabled=false;$('#submitBtn').textContent='정확히 확인하고 등록'}}
+        <section class="badge-section" aria-labelledby="gratitudeBadgeTitle">
+          <div class="section-head compact">
+            <div>
+              <span class="eyebrow">연속 달성 배지</span>
+              <h3 id="gratitudeBadgeTitle">나의 챌린지 배지</h3>
+            </div>
+            <span class="pill" id="gratitudeBadgeCount">0/2</span>
+          </div>
+          <div id="gratitudeBadges" class="badge-grid"></div>
+        </section>
 
-  async function checkAdmin(){if(!db)return false;const {data:{user}}=await db.auth.getUser();if(!user)return false;const {data,error}=await db.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();isAdmin=!!data&&!error;return isAdmin}
-  async function adminLogin(){if(!db)return $('#adminLoginMessage').textContent='config.js에 Supabase 설정을 먼저 입력해 주세요.';const email=$('#adminEmail').value.trim(),password=$('#adminPassword').value;if(!email||!password)return toast('관리자 이메일과 비밀번호를 입력해 주세요.');$('#adminLoginBtn').disabled=true;try{const {error}=await db.auth.signInWithPassword({email,password});if(error)throw error;if(!(await checkAdmin())){await db.auth.signOut();throw new Error('관리자 권한이 등록되지 않은 계정입니다.')}showAdminPanel();await loadAdminRecords();toast('관리자 모드로 로그인했습니다.')}catch(e){console.error(e);$('#adminLoginMessage').textContent=e.message||'로그인에 실패했습니다.'}finally{$('#adminLoginBtn').disabled=false}}
-  function showAdminPanel(){$('#adminLogin').style.display='none';$('#adminPanel').classList.add('show');$('#startDateInput').value=state.startDate}
-  async function loadAdminRecords(){if(!isAdmin)return;const {data,error}=await db.from('challenge_submissions').select('id,challenge_day,challenge_date,grade,student_name,submitted_at').order('submitted_at',{ascending:false}).limit(5000);if(error){toast('관리자 기록을 불러오지 못했습니다.');console.error(error);return}adminRecords=data||[];renderAdminRecords()}
-  function renderAdminRecords(){const dayFilter=$('#filterDay').value,gradeFilter=$('#filterGrade').value;const filtered=adminRecords.filter(r=>(!dayFilter||String(r.challenge_day)===dayFilter)&&(!gradeFilter||r.grade===gradeFilter));const tb=$('#recordTbody');tb.innerHTML='';for(const r of filtered){const time=new Intl.DateTimeFormat('ko-KR',{timeZone:TZ,month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(r.submitted_at));const tr=document.createElement('tr');tr.innerHTML=`<td>${r.challenge_day}</td><td>${esc(r.challenge_date)}</td><td>${esc(r.grade)}</td><td>${esc(r.student_name)}</td><td>${esc(time)}</td><td><button class="secondary danger" data-del="${r.id}" style="padding:6px 8px">삭제</button></td>`;tb.appendChild(tr)}if(!filtered.length)tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">기록이 없습니다.</td></tr>';const today=dayInfo().day;$('#statToday').textContent=adminRecords.filter(r=>r.challenge_day===today&&r.challenge_date===seoulDateStr()).length;$('#statStudents').textContent=new Set(adminRecords.map(r=>`${r.grade}|${r.student_name.replace(/\s/g,'')}`)).size;$('#statTotal').textContent=adminRecords.length;$$('[data-del]').forEach(b=>b.addEventListener('click',()=>deleteRecord(b.dataset.del)))}
-  async function deleteRecord(id){if(!confirm('이 성공 기록을 삭제할까요?'))return;const {error}=await db.from('challenge_submissions').delete().eq('id',id);if(error)return toast('삭제에 실패했습니다.');await loadAdminRecords();toast('기록을 삭제했습니다.')}
-  async function saveStartDate(){const v=$('#startDateInput').value;if(!v)return;const {error}=await db.from('app_settings').update({start_date:v,updated_at:new Date().toISOString()}).eq('id',true);if(error)return toast('시작일 저장에 실패했습니다.');state.startDate=v;saveLocal();renderAll();toast('전체 도전 시작일을 변경했습니다.')}
-  function exportCsv(){const rows=[['DAY','날짜','학년','이름','입력시각'],...adminRecords.map(r=>[r.challenge_day,r.challenge_date,r.grade,r.student_name,new Date(r.submitted_at).toLocaleString('ko-KR',{timeZone:TZ})])];const csv='\uFEFF'+rows.map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='proverbs-100day-records.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
-  async function adminLogout(){if(db)await db.auth.signOut();isAdmin=false;$('#adminPanel').classList.remove('show');$('#adminLogin').style.display='block';adminRecords=[];toast('로그아웃했습니다.')}
-  function showView(v){$$('.view').forEach(el=>el.classList.remove('active'));$(`#view-${v}`).classList.add('active');$$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));if(v==='stamps')renderStamps();if(v==='admin')resumeAdmin()}
-  async function resumeAdmin(){if(await checkAdmin()){showAdminPanel();await loadAdminRecords()}}
+        <form id="gratitudeForm" class="gratitude-form">
+          <label class="field-label">오늘의 감사기도
+            <textarea id="gratitudeText" rows="5" maxlength="2000" placeholder="오늘 하나님께 감사한 일, 사람, 순간을 적어 보세요."></textarea>
+          </label>
+          <button id="gratitudeSubmitBtn" class="primary" type="submit">오늘 감사기도 기록하기</button>
+          <p id="gratitudeStatus" class="status">매일 기록하면 연속일수가 올라갑니다.</p>
+        </form>
 
-  function blockCopyPaste(e){e.preventDefault();toast('복사·붙여넣기는 사용할 수 없어요. 말씀을 직접 입력해 주세요.')}
-  function setupWritingProtection(){const input=$('#typingInput'),protectedVerses=[$('#homeVerse'),$('#writerVerse')];protectedVerses.forEach(el=>{el.addEventListener('copy',blockCopyPaste);el.addEventListener('cut',blockCopyPaste);el.addEventListener('contextmenu',blockCopyPaste);el.addEventListener('dragstart',blockCopyPaste)});input.addEventListener('paste',blockCopyPaste);input.addEventListener('drop',blockCopyPaste);input.addEventListener('contextmenu',e=>{e.preventDefault();toast('붙여넣기 메뉴는 사용할 수 없어요. 직접 입력해 주세요.')});input.addEventListener('beforeinput',e=>{if(['insertFromPaste','insertFromDrop'].includes(e.inputType))blockCopyPaste(e)});input.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='v')blockCopyPaste(e)})}
+        <div class="gratitude-history-wrap">
+          <div class="section-head compact">
+            <h3>나의 최근 기록</h3>
+            <span class="pill" id="gratitudeCount">0회</span>
+          </div>
+          <div id="gratitudeHistory" class="gratitude-history"></div>
+          <p class="privacy-note">감사기도 내용은 다른 학생에게 공개되지 않습니다. 최근 기록 표시는 현재 기기에 저장된 기록을 기준으로 합니다.</p>
+        </div>
+      </section>
 
-  for(let d=1;d<=100;d++)$('#filterDay').insertAdjacentHTML('beforeend',`<option value="${d}">DAY ${d}</option>`);
-  $$('.nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));$('#startWriteBtn').addEventListener('click',openWriter);$('#openWriterBtn').addEventListener('click',openWriter);$('#closeWriterBtn').addEventListener('click',closeWriter);$('#writerModal').addEventListener('click',e=>{if(e.target===$('#writerModal'))closeWriter()});$('#typingInput').addEventListener('input',updateMatch);$('#submitBtn').addEventListener('click',submit);$('#adminLoginBtn').addEventListener('click',adminLogin);$('#refreshAdminBtn').addEventListener('click',loadAdminRecords);$('#exportCsvBtn').addEventListener('click',exportCsv);$('#adminLogoutBtn').addEventListener('click',adminLogout);$('#saveStartDateBtn').addEventListener('click',saveStartDate);$('#filterDay').addEventListener('change',renderAdminRecords);$('#filterGrade').addEventListener('change',renderAdminRecords);
-  let lastDate=seoulDateStr();setInterval(async()=>{renderCountdown();const now=seoulDateStr();if(now!==lastDate){lastDate=now;await syncSettings();renderAll();toast('새로운 날의 말씀으로 변경되었습니다.')}},1000);
+      <section id="board" class="panel card hidden">
+        <span class="eyebrow">자유롭게 남겨 주세요</span>
+        <h2>익명 건의 · 문의 게시판</h2>
+        <form id="boardForm">
+          <label class="field-label">내용
+            <textarea id="boardText" rows="5" maxlength="3000" placeholder="건의사항이나 문의 내용을 적어 주세요."></textarea>
+          </label>
+          <button class="primary" type="submit">익명으로 등록</button>
+          <p id="boardStatus" class="status"></p>
+        </form>
+        <div id="boardList" class="list board-list"></div>
+      </section>
 
-  setupWritingProtection();
-  renderAll();
-  if(!configured){setServerStatus(false,'config.js 설정 필요');$('#adminLoginMessage').textContent='Supabase Project URL과 Publishable key를 config.js에 입력하면 운영 모드가 활성화됩니다.'}
-  // PWA 설치 및 서비스워커
-  let deferredInstallPrompt=null;
-  const installBtn=$('#installAppBtn'), installHint=$('#installHint');
-  const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
-  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
-  function updateInstallUi(){
-    if(isStandalone()){
-      installBtn.hidden=true;
-      installHint.textContent='앱으로 설치되어 있습니다.';
-    }else if(deferredInstallPrompt){
-      installBtn.hidden=false;
-      installHint.textContent='홈 화면에 설치하면 더 편리해요.';
-    }else if(isIOS){
-      installBtn.hidden=false;
-      installBtn.textContent='📲 설치 방법';
-      installHint.textContent='Safari에서 홈 화면에 추가할 수 있어요.';
-    }else{
-      installBtn.hidden=true;
-      installHint.textContent='브라우저 메뉴의 “앱 설치” 또는 “홈 화면에 추가”를 이용할 수 있어요.';
-    }
-  }
-  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;updateInstallUi();});
-  window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;updateInstallUi();toast('앱 설치가 완료되었습니다 🎉');});
-  installBtn.addEventListener('click',async()=>{
-    if(isIOS && !deferredInstallPrompt){
-      alert('아이폰/아이패드 설치 방법\n\n1. Safari 아래의 공유 버튼(□↑)을 누릅니다.\n2. “홈 화면에 추가”를 누릅니다.\n3. 오른쪽 위 “추가”를 누릅니다.');
-      return;
-    }
-    if(!deferredInstallPrompt)return;
-    deferredInstallPrompt.prompt();
-    try{await deferredInstallPrompt.userChoice}catch(e){console.warn(e)}
-    deferredInstallPrompt=null;updateInstallUi();
-  });
-  if('serviceWorker' in navigator){
-    window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(e=>console.warn('Service worker registration failed',e)));
-  }
-  updateInstallUi();
+      <section class="card admin-entry">
+        <button id="openAdminBtn" class="ghost" type="button">관리자 화면</button>
+      </section>
 
-  (async()=>{await Promise.all([ensurePassages(),syncSettings()]);renderAll();await resumeAdmin()})();
-})();
-</script>
+      <section id="adminPanel" class="card hidden">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">관리자 전용</span>
+            <h2>콘텐츠 관리</h2>
+          </div>
+          <button id="adminLogoutBtn" class="ghost hidden" type="button">로그아웃</button>
+        </div>
+
+        <form id="adminLoginForm" class="admin-login">
+          <label>관리자 이메일<input id="adminEmail" type="email" autocomplete="username" required /></label>
+          <label>비밀번호<input id="adminPassword" type="password" autocomplete="current-password" required /></label>
+          <button class="primary" type="submit">관리자 로그인</button>
+          <p id="adminLoginStatus" class="status"></p>
+        </form>
+
+        <div id="adminWorkspace" class="hidden">
+          <div class="admin-grid">
+            <form id="weeklyForm" class="subcard admin-editor-card">
+              <div class="admin-editor-head">
+                <div>
+                  <h3>이번 주 말씀 · 성경공부</h3>
+                  <p id="weeklyModeLabel" class="muted admin-mode-label">기존 기록을 선택해 수정하거나 새 주차를 등록할 수 있습니다.</p>
+                </div>
+                <button id="newWeeklyBtn" class="ghost compact-btn" type="button">새 주차 작성</button>
+              </div>
+              <label>기존 기록 선택
+                <select id="weeklyPicker">
+                  <option value="">기록을 불러오는 중...</option>
+                </select>
+              </label>
+              <label>주 시작일<input id="weekStart" type="date" required /></label>
+              <label>말씀구절<input id="adminVerseRef" type="text" maxlength="120" required /></label>
+              <label>말씀본문<textarea id="adminVerseText" rows="5" maxlength="5000" required></textarea></label>
+              <label>성경공부 제목<input id="adminStudyTitle" type="text" maxlength="200" required /></label>
+              <label>질문 1<textarea id="adminQ1" rows="2" maxlength="2000" required></textarea></label>
+              <label>질문 2<textarea id="adminQ2" rows="2" maxlength="2000" required></textarea></label>
+              <label>질문 3 (선택)<textarea id="adminQ3" rows="2" maxlength="2000"></textarea></label>
+              <label class="check-row"><input id="weeklyPublished" type="checkbox" checked /> 학생에게 공개</label>
+              <button id="weeklySubmitBtn" class="primary" type="submit">말씀·문제 등록</button>
+              <p id="weeklyAdminStatus" class="status"></p>
+            </form>
+
+            <form id="noticeAdminForm" class="subcard admin-editor-card">
+              <div class="admin-editor-head">
+                <div>
+                  <h3>공지사항 관리</h3>
+                  <p id="noticeModeLabel" class="muted admin-mode-label">등록된 공지를 선택해 수정하거나 새 공지를 등록할 수 있습니다.</p>
+                </div>
+                <button id="newNoticeBtn" class="ghost compact-btn" type="button">새 공지 작성</button>
+              </div>
+              <label>등록된 공지 선택
+                <select id="noticePicker">
+                  <option value="">공지를 불러오는 중...</option>
+                </select>
+              </label>
+              <label>제목<input id="noticeTitle" required maxlength="200" /></label>
+              <label>일정<input id="noticeDate" type="date" /></label>
+              <label>내용<textarea id="noticeBody" rows="4" maxlength="5000" required></textarea></label>
+              <label class="check-row"><input id="noticeBanner" type="checkbox" checked /> 상단 배너 표시</label>
+              <label class="check-row"><input id="noticePublished" type="checkbox" checked /> 학생에게 공개</label>
+              <button id="noticeSubmitBtn" class="primary" type="submit">공지 등록</button>
+              <p id="noticeAdminStatus" class="status"></p>
+            </form>
+
+            <div class="subcard gratitude-admin-note">
+              <h3>감사기도 챌린지</h3>
+              <p>학생은 하루에 한 번 감사기도를 기록할 수 있습니다.</p>
+              <p class="muted">감사기도 내용은 학생끼리 공개되지 않으며 관리자 제출 기록에서만 확인할 수 있습니다.</p>
+            </div>
+
+            <div class="subcard">
+              <h3>이번 주 제출 현황</h3>
+              <div class="stats">
+                <div><span>말씀쓰기</span><strong id="statAttendance">0</strong></div>
+                <div><span>성경공부</span><strong id="statStudy">0</strong></div>
+                <div><span>기도제목</span><strong id="statPrayer">0</strong></div>
+                <div><span>감사기도</span><strong id="statGratitude">0</strong></div>
+                <div><span>익명글</span><strong id="statBoard">0</strong></div>
+              </div>
+              <button id="refreshAdminBtn" class="ghost full" type="button">현황 새로고침</button>
+            </div>
+          </div>
+
+          <div class="subcard">
+            <h3>학생 제출 기록</h3>
+            <div id="adminRecords" class="list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>양정중앙교회 청소년부 · 주의울림</footer>
+  </div>
+
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
